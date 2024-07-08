@@ -1,7 +1,7 @@
 import cors from 'cors'
 import * as dotenv from "dotenv"
 import express from 'express'
-// import { DriverRouter } from './routes/driver'
+import { RouterUser } from './routes/user'
 
 const app = express()
 
@@ -13,6 +13,6 @@ dotenv.config()
 
 app.use(express.json())
 
-app.use(new DriverRouter().getRouter())
+app.use(new RouterUser().getRouter())
 
 app.listen(PORT, () => console.log(`funcionando na porta ${PORT}`))

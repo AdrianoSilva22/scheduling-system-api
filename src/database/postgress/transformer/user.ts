@@ -8,7 +8,7 @@ function toUserEntity(m: UserModel): UserEntity {
 }
 
 function toUserModel(e: UserEntity): UserModel {
-    return new UserEntity(e.ID, e.name, e.email, e.password, e.phone, e.createdAt, e.updatedAt)
+    return new UserModel(e.ID, e.name, e.email, e.password, e.phone, e.createdAt, e.updatedAt)
 
 }
 
@@ -16,3 +16,4 @@ export {
     toUserEntity,
     toUserModel
 };
+

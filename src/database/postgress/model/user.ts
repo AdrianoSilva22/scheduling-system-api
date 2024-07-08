@@ -1,6 +1,6 @@
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
-@Entity({ schema: 'public', name: 'drivers' })
+@Entity({ schema: 'public', name: 'users' })
 class UserModel {
   @PrimaryGeneratedColumn('uuid', { name: 'id' })
   ID: string | null
@@ -8,7 +8,7 @@ class UserModel {
   @Column({ type: 'varchar', length: '255' })
   name: string
 
-  @Column({ type: 'varchar', length: '255' })
+  @Column({ type: 'varchar', length: '255', unique: true })
   email: string
 
   @Column({ type: 'varchar', length: '255' })

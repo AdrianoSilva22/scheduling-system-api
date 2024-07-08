@@ -21,8 +21,8 @@ class DataSoucerBuilder {
     static async builderDataSource() {
         return new DataSource({
             type: 'postgres',
-            url: 'postgresql://postgres:postgres@localhost:5432/scheduling',
-            synchronize: false,
+            url: 'postgresql://postgres:postgres@localhost:5432/postgres',
+            synchronize: true,
             entities: await this.resolveEntities()
 
         })
