@@ -1,3 +1,5 @@
+import { UserEntity } from "../../entity/user"
+
 class CreateUserUseCaseRequest {
     name: string
     email: string
@@ -13,13 +15,24 @@ class CreateUserUseCaseRequest {
 }
 class CreateUserUseCaseResponse {
     error: string | null
+
     constructor(error: string | null) {
+        this.error = error
+    }
+}
+class ListUsersUseCaseResponse {
+    users: UserEntity[]
+    error?: string
+
+    constructor(users: UserEntity[], error?: string) {
+        this.users = users
         this.error = error
     }
 }
 
 export {
     CreateUserUseCaseRequest,
-    CreateUserUseCaseResponse
+    CreateUserUseCaseResponse,
+    ListUsersUseCaseResponse
 }
 

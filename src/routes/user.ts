@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { CreateUserController } from "../controller/user";
+import { CreateUserController, ListAllUsersController } from "../controller/user";
 
 class RouterUser {
   private router: Router
@@ -7,6 +7,7 @@ class RouterUser {
   constructor() {
     this.router = Router()
     this.router.post('/createUser', new CreateUserController().createUser)
+    this.router.post('/listUsers', new ListAllUsersController().getAllUsers)
   }
 
   getRouter(): Router {

@@ -1,7 +1,8 @@
 import { UserEntity } from "../entity/user";
+import { passwordHash } from "../utils/passwordHashUtils";
 import { generateUUID } from "../utils/uuid";
-import { CreateUserUseCaseRepositoryInterface } from "./repository/user";
-import { CreateUserUseCaseRequest, CreateUserUseCaseResponse } from "./ucio/user";
+import { CreateUserUseCaseRepositoryInterface, ListUsersUseCaseRepositoryInterface } from "./repository/user";
+import { CreateUserUseCaseRequest, CreateUserUseCaseResponse, ListUsersUseCaseResponse } from "./ucio/user";
 import { CreateUserUseCaseValidateInterface } from "./validate/user";
 
 class CreateUserUseCase {
@@ -31,18 +32,49 @@ class CreateUserUseCase {
 
             const now = new Date()
 
-            await this.repository.createUser(new UserEntity(UUID, name, email, password, phone, now, now))
+            await this.repository.createUser(
+                new UserEntity(
+                    UUID,
+                    name,
+                    email,
+                    await passwordHash(password),
+                    phone,
+                    now,
+                    now))
             return new CreateUserUseCaseResponse(null)
 
         } catch (error: any) {
             console.log('INTERNAL_SERVER_ERROR', error)
-            
+
             return new CreateUserUseCaseResponse(error)
         }
     }
 }
 
+class ListUsersUseCase {
+    repository: ListUsersUseCaseRepositoryInterface
+
+    constructor(repository: ListUsersUseCaseRepositoryInterface
+    ) {
+        this.repository = repository
+    }
+
+    async listUsers(): Promise<ListUsersUseCaseResponse> {
+        try {
+
+            const users = await this.repository.getAllUsers()
+            return new ListUsersUseCaseResponse(users)
+
+        } catch (error: any) {
+            console.log('INTERNAL_SERVER_ERROR', error)
+
+            return new ListUsersUseCaseResponse(error)
+        }
+    }
+}
+
 export {
-    CreateUserUseCase
+    CreateUserUseCase,
+    ListUsersUseCase
 };
 

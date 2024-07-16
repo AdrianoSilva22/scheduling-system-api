@@ -4,6 +4,6 @@ interface CreateUserUseCaseValidateInterface {
 }
 
 export {
-    CreateUserUseCaseValidateInterface
+  CreateUserUseCaseValidateInterface
 }
 
