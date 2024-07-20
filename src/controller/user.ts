@@ -1,8 +1,8 @@
 import { Request, Response } from "express"
-import { CreateUserUserCaseRepository, ListUsersUseCaseRepository } from "../repository/user"
+import { CreateUserUserCaseRepository, ListUserByIdUseCaseRepository, ListUsersUseCaseRepository } from "../repository/user"
 import { CreateUserUseCaseRequest } from "../useCase/ucio/user"
-import { CreateUserUseCase, ListUsersUseCase } from "../useCase/user"
-import { CreateUserUseCaseValidate } from "../validate/user"
+import { CreateUserUseCase, ListUserByIdUseCase, ListUsersUseCase } from "../useCase/user"
+import { CreateUserUseCaseValidate, ListUserByIdUseCaseValidate } from "../validate/user"
 class CreateUserController {
     async createUser(req: Request, res: Response) {
         try {
@@ -23,13 +23,13 @@ class CreateUserController {
         }
     }
 }
-class ListAllUsersController {
-    async getAllUsers(req: Request, res: Response) {
+class ListUsersController {
+    async listUsers(req: Request, res: Response) {
         try {
             const repository = new ListUsersUseCaseRepository
             const useCase = new ListUsersUseCase(repository)
 
-            const users = await useCase.listUsers()
+            const users = (await useCase.listUsers()).users
 
             res.status(200).json({ users: users, message:  "Usuários listados com sucesso" })
         } catch (error) {
@@ -38,9 +38,32 @@ class ListAllUsersController {
         }
     }
 }
+class ListUserByIdController {
+    async listUserById(req: Request, res: Response) {
+        try {
+            const { id } = req.body
+            
+            const repository = new ListUserByIdUseCaseRepository
+            const validate = new ListUserByIdUseCaseValidate
+            const useCase = new ListUserByIdUseCase(repository, validate)
+
+            const user = (await useCase.listUserById(id))
+            
+            if (user.user){
+                res.status(200).json({ user: user.user, message:  "Usuário listado com sucesso" })
+            } else {
+                res.status(200).json({ message: user.error })
+            }
+        } catch (error) {
+            console.error("Erro ao listar usuário:", error)
+            res.status(500).json({ error: "Erro ao processar a requisição" })
+        }
+    }
+}
 
 export {
     CreateUserController,
-    ListAllUsersController
+    ListUserByIdController,
+    ListUsersController
 }
 

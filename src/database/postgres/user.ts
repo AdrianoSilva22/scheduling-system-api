@@ -3,30 +3,37 @@ import { Connection } from "./connection";
 import { UserModel } from "./model/user";
 import { toUserEntity, toUserModel } from "./transformer/user";
 
-async function createUser(userData: UserEntity): Promise<void> {
+async function createUser(userEntity: UserEntity): Promise<void> {
     const repository = await Connection.getRepository(UserModel)
 
-    const userModel = toUserModel(userData)
+    const userModel = toUserModel(userEntity)
 
     await repository.save(userModel)
 }
 
-async function getAllUsers(): Promise<UserEntity[]> {
+async function listUsers(): Promise<UserEntity[]> {
     const repository = await Connection.getRepository(UserModel)
 
-    const users = await repository.find() 
+    const users = await repository.find()
 
-    const user = users.map( (user) =>{
-     return toUserEntity(user)
-        
-    })
+    const usersEntities = users.map((userModel) => toUserEntity(userModel))
 
-  return user
+    return usersEntities
+}
 
+async function listUserById(id: string): Promise<UserEntity> {
+    const repository = await Connection.getRepository(UserModel)
+
+    const userModel = await repository.findOneBy({ ID: id })
+
+    const userEntity = toUserEntity(userModel)
+
+    return userEntity
 }
 
 export {
     createUser,
-    getAllUsers
+    listUserById,
+    listUsers
 };
 

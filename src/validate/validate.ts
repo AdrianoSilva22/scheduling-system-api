@@ -1,3 +1,4 @@
+
 function checkNumberEmpty(e: number): boolean {
     return e === undefined || e === null || Number.isNaN(e)
 }
@@ -22,12 +23,19 @@ function checkRowEmptyFile(row: any): boolean {
     return row.length === 9 || row.undefined || row.null
 }
 
+function checkUuid(uuid: string) {
+    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+   
+    return uuidRegex.test(uuid);
+}
+
 export {
     checkBooleanEmpty,
     checkDateEmpty,
     checkListEmpty,
     checkNumberEmpty,
     checkRowEmptyFile,
-    checkStringEmpty
+    checkStringEmpty,
+    checkUuid
 }
 

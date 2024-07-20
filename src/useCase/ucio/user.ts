@@ -30,9 +30,32 @@ class ListUsersUseCaseResponse {
     }
 }
 
+class ListUserByIdUseCaseRequest {
+    id: string
+
+    constructor(id: string) {
+        this.id = id
+    }
+}
+class ListUserByIdUseCaseResponse {
+    user?: UserEntity
+    error?: string
+
+    constructor(user?: UserEntity | string, error?: string) {
+        if (typeof user === 'string') {
+            this.error = user
+        } else {
+            this.user = user
+            this.error = error
+        }
+    }
+}
+
 export {
     CreateUserUseCaseRequest,
     CreateUserUseCaseResponse,
+    ListUserByIdUseCaseRequest,
+    ListUserByIdUseCaseResponse,
     ListUsersUseCaseResponse
 }
 

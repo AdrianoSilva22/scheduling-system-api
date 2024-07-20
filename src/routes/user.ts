@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { CreateUserController, ListAllUsersController } from "../controller/user";
+import { CreateUserController, ListUserByIdController, ListUsersController } from "../controller/user";
 
 class RouterUser {
   private router: Router
@@ -7,7 +7,8 @@ class RouterUser {
   constructor() {
     this.router = Router()
     this.router.post('/createUser', new CreateUserController().createUser)
-    this.router.post('/listUsers', new ListAllUsersController().getAllUsers)
+    this.router.post('/listUsers', new ListUsersController().listUsers)
+    this.router.post('/listUserById', new ListUserByIdController().listUserById)
   }
 
   getRouter(): Router {

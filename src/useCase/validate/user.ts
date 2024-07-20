@@ -1,9 +1,13 @@
-import { CreateUserUseCaseRequest } from "../ucio/user"
+import { CreateUserUseCaseRequest, ListUserByIdUseCaseRequest } from "../ucio/user"
 interface CreateUserUseCaseValidateInterface {
-  validateDriver(req: CreateUserUseCaseRequest): string | null
+  validateUser(req: CreateUserUseCaseRequest): string | null
+}
+interface ListUserByIdUseCaseValidateInterface {
+  validateUserById(req: ListUserByIdUseCaseRequest): string | null
 }
 
 export {
-  CreateUserUseCaseValidateInterface
+  CreateUserUseCaseValidateInterface,
+  ListUserByIdUseCaseValidateInterface
 }
 

@@ -3,7 +3,7 @@ import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 @Entity({ schema: 'public', name: 'users' })
 class UserModel {
   @PrimaryGeneratedColumn('uuid', { name: 'id' })
-  ID: string | null
+  ID: string
 
   @Column({ type: 'varchar', length: '255' })
   name: string
@@ -23,7 +23,7 @@ class UserModel {
   @Column({ type: 'timestamp', name: 'updated_at' })
   updatedAt: Date
 
-  constructor(ID: string | null, name: string, email: string, password: string, phone: string, createdAt: Date, updatedAt: Date) {
+  constructor(ID: string, name: string, email: string, password: string, phone: string, createdAt: Date, updatedAt: Date) {
     this.ID = ID
     this.name = name
     this.email = email

@@ -1,5 +1,5 @@
 class UserEntity {
-    ID: string | null
+    ID: string
     name: string
     email: string
     password: string
@@ -7,7 +7,7 @@ class UserEntity {
     createdAt: Date
     updatedAt: Date
   
-    constructor(ID: string | null, name: string, email: string, password: string, phone: string, createdAt: Date, updatedAt: Date) {
+    constructor(ID: string, name: string, email: string, password: string, phone: string, createdAt: Date, updatedAt: Date) {
       this.ID = ID
       this.name = name
       this.email = email
