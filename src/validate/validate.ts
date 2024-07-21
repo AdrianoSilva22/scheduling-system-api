@@ -1,3 +1,4 @@
+import { ListUserByIdUseCaseRequest } from "../useCase/ucio/user"
 
 function checkNumberEmpty(e: number): boolean {
     return e === undefined || e === null || Number.isNaN(e)
@@ -23,10 +24,12 @@ function checkRowEmptyFile(row: any): boolean {
     return row.length === 9 || row.undefined || row.null
 }
 
-function checkUuid(uuid: string) {
+function checkUuid( req: ListUserByIdUseCaseRequest) {
     const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
    
-    return uuidRegex.test(uuid);
+    const idString = req as unknown as string;
+    console.log(uuidRegex.test(idString));
+    return uuidRegex.test(idString);
 }
 
 export {

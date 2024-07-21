@@ -16,9 +16,8 @@ class CreateUserUseCaseValidate implements CreateUserUseCaseValidateInterface {
 
 class ListUserByIdUseCaseValidate implements ListUserByIdUseCaseValidateInterface {
     validateUserById(req: ListUserByIdUseCaseRequest): string | null {
-        const { id } = req
-        
-        if (checkUuid(id)) return "O Id é necessário e no formato uuid"
+
+        if (!checkUuid(req)) return "O Id é necessário e no formato uuid"
 
         return null
     }

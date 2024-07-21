@@ -1,8 +1,8 @@
 import { UserEntity } from "../entity/user"
 import { passwordHash } from "../utils/passwordHashUtils"
 import { generateUUID } from "../utils/uuid"
-import { CreateUserUseCaseRepositoryInterface, ListUsersByIdUseCaseRepositoryInterface, ListUsersUseCaseRepositoryInterface } from "./repository/user"
-import { CreateUserUseCaseRequest, CreateUserUseCaseResponse, ListUserByIdUseCaseRequest, ListUserByIdUseCaseResponse, ListUsersUseCaseResponse } from "./ucio/user"
+import { CreateUserUseCaseRepositoryInterface, DeleteUsersByIdUseCaseRepositoryInterface, ListUsersByIdUseCaseRepositoryInterface, ListUsersUseCaseRepositoryInterface } from "./repository/user"
+import { CreateUserUseCaseRequest, CreateUserUseCaseResponse, DeleteUserByIdUseCaseResponse, ListUserByIdUseCaseRequest, ListUserByIdUseCaseResponse, ListUsersUseCaseResponse } from "./ucio/user"
 import { CreateUserUseCaseValidateInterface, ListUserByIdUseCaseValidateInterface } from "./validate/user"
 
 class CreateUserUseCase {
@@ -83,21 +83,40 @@ class ListUserByIdUseCase {
 
     async listUserById(req: ListUserByIdUseCaseRequest ): Promise<ListUserByIdUseCaseResponse> {
         try {
-            const errorMessage = this.validate.validateUserById(req)
+            const errorMessage = await this.validate.validateUserById(req)
+            
             
             if (errorMessage) {
                 console.log('PRE_CONDITIONAL_ERROR', errorMessage)
                 return new ListUserByIdUseCaseResponse(errorMessage)
             }
-            const { id } = req
 
-            const user = await this.repository.listUserById(id)
+            const user = await this.repository.listUserById(req)
+            
             return new ListUserByIdUseCaseResponse(user)
 
         } catch (error: any) {
             console.log('INTERNAL_SERVER_ERROR', error)
-
             return new ListUserByIdUseCaseResponse(error)
+        }
+    }
+}
+class deleteUserByIdUseCase {
+    repository: DeleteUsersByIdUseCaseRepositoryInterface
+    constructor(repository: DeleteUsersByIdUseCaseRepositoryInterface
+    ) {
+        this.repository = repository
+    }
+
+    async deleteUserById(req: ListUserByIdUseCaseRequest ): Promise<DeleteUserByIdUseCaseResponse> {
+        try {
+            const user = await this.repository.deleteUserById(req)
+            
+            return new DeleteUserByIdUseCaseResponse(null)
+
+        } catch (error: any) {
+            console.log('INTERNAL_SERVER_ERROR', error)
+            return new DeleteUserByIdUseCaseResponse(error)
         }
     }
 }
@@ -105,6 +124,6 @@ class ListUserByIdUseCase {
 export {
     CreateUserUseCase,
     ListUserByIdUseCase,
-    ListUsersUseCase
+    ListUsersUseCase,
+    deleteUserByIdUseCase
 }
-

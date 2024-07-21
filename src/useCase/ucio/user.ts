@@ -31,10 +31,10 @@ class ListUsersUseCaseResponse {
 }
 
 class ListUserByIdUseCaseRequest {
-    id: string
+    ID: string
 
-    constructor(id: string) {
-        this.id = id
+    constructor(ID: string) {
+        this.ID = ID
     }
 }
 class ListUserByIdUseCaseResponse {
@@ -51,11 +51,59 @@ class ListUserByIdUseCaseResponse {
     }
 }
 
+class UpdateUserByIdUseCaseRequest {
+    ID: string
+    name?: string
+    password?: string
+    phone?: string
+    
+
+    constructor(ID: string, name?: string, password?: string, phone?: string) {
+        this.ID = ID
+        this.name = name
+        this.password = password
+        this.phone = phone
+    }
+}
+
+class UpdteUserByIdUseCaseResponse {
+    user?: UserEntity
+    error?: string
+
+    constructor(user?: UserEntity | string, error?: string) {
+        if (typeof user === 'string') {
+            this.error = user
+        } else {
+            this.user = user
+            this.error = error
+        }
+    }
+}
+
+class DeleteUserByIdUseCaseRequest {
+    ID: string
+
+    constructor(ID: string) {
+        this.ID = ID
+    }
+}
+class DeleteUserByIdUseCaseResponse {
+    error: string | null
+
+    constructor(error: string | null) {
+        this.error = error
+    }
+}
+
 export {
     CreateUserUseCaseRequest,
     CreateUserUseCaseResponse,
     ListUserByIdUseCaseRequest,
     ListUserByIdUseCaseResponse,
-    ListUsersUseCaseResponse
+    ListUsersUseCaseResponse,
+    UpdateUserByIdUseCaseRequest,
+    UpdteUserByIdUseCaseResponse,
+    DeleteUserByIdUseCaseRequest,
+    DeleteUserByIdUseCaseResponse
 }
 

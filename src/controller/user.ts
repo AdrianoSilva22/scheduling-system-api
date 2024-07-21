@@ -1,7 +1,7 @@
 import { Request, Response } from "express"
-import { CreateUserUserCaseRepository, ListUserByIdUseCaseRepository, ListUsersUseCaseRepository } from "../repository/user"
+import { CreateUserUserCaseRepository, DeleteUserByIdUseCaseRepository, ListUserByIdUseCaseRepository, ListUsersUseCaseRepository } from "../repository/user"
 import { CreateUserUseCaseRequest } from "../useCase/ucio/user"
-import { CreateUserUseCase, ListUserByIdUseCase, ListUsersUseCase } from "../useCase/user"
+import { CreateUserUseCase, deleteUserByIdUseCase, ListUserByIdUseCase, ListUsersUseCase } from "../useCase/user"
 import { CreateUserUseCaseValidate, ListUserByIdUseCaseValidate } from "../validate/user"
 class CreateUserController {
     async createUser(req: Request, res: Response) {
@@ -31,7 +31,7 @@ class ListUsersController {
 
             const users = (await useCase.listUsers()).users
 
-            res.status(200).json({ users: users, message:  "Usuários listados com sucesso" })
+            res.status(200).json({ users: users, message: "Usuários listados com sucesso" })
         } catch (error) {
             console.error("Erro ao listar usuários:", error)
             res.status(500).json({ error: "Erro ao processar a requisição" })
@@ -41,19 +41,35 @@ class ListUsersController {
 class ListUserByIdController {
     async listUserById(req: Request, res: Response) {
         try {
-            const { id } = req.body
+            const { ID } = req.body
             
             const repository = new ListUserByIdUseCaseRepository
             const validate = new ListUserByIdUseCaseValidate
             const useCase = new ListUserByIdUseCase(repository, validate)
 
-            const user = (await useCase.listUserById(id))
-            
-            if (user.user){
-                res.status(200).json({ user: user.user, message:  "Usuário listado com sucesso" })
-            } else {
-                res.status(200).json({ message: user.error })
+            const user = (await useCase.listUserById(ID))
+            if (user.user) {
+                res.status(200).json({ user: user.user, message: "Usuário listado com sucesso" })
+            } else if (user.error) {
+                res.status(200).json({ error: user.error })
             }
+        } catch (error) {
+            console.error("Erro ao listar usuário:", error)
+            res.status(500).json({ error: "Erro ao processar a requisição" })
+        }
+    }
+}
+class DeleteUserByIdController {
+    async deleteUserById(req: Request, res: Response) {
+        try {
+            const { ID } = req.body
+            
+            const repository = new DeleteUserByIdUseCaseRepository
+            const useCase = new deleteUserByIdUseCase(repository)
+
+           await useCase.deleteUserById(ID)
+
+            res.status(200).json({message: "usuário deletado com sucesso!"})
         } catch (error) {
             console.error("Erro ao listar usuário:", error)
             res.status(500).json({ error: "Erro ao processar a requisição" })
@@ -64,6 +80,7 @@ class ListUserByIdController {
 export {
     CreateUserController,
     ListUserByIdController,
-    ListUsersController
+    ListUsersController,
+    DeleteUserByIdController
 }
 
