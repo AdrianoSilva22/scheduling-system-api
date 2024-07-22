@@ -3,6 +3,7 @@ import { ListUserByIdUseCaseRequest, UpdateUserByIdUseCaseRequest } from "../../
 import { Connection } from "./connection";
 import { UserModel } from "./model/user";
 import { toUserEntity, toUserModel } from "./transformer/user";
+import bcrypt from "bcryptjs"
 
 async function createUser(userEntity: UserEntity): Promise<void> {
     const repository = await Connection.getRepository(UserModel)
@@ -33,25 +34,20 @@ async function listUserById(ID: ListUserByIdUseCaseRequest): Promise<UserEntity>
 }
 
 async function updateUserById(req: UpdateUserByIdUseCaseRequest): Promise<UserEntity> {
-    const { ID, name, password, phone } = req
-
+    const { ID, ...userProps } = req
+    
     const repository = await Connection.getRepository(UserModel)
 
-    const userModel = await repository.findOneBy({ ID }) as UserModel
-
-    if (name) userModel.name = name
-    if (password) userModel.password = password
-    if (phone) userModel.phone = phone
-
-    const updateUserModel = await repository.save(userModel)
-
-    const userEntity = toUserEntity(updateUserModel)
+    await repository.update(ID, userProps)
+    const updatedUserModel = await repository.findOneBy({ ID });
+    const userEntity = toUserEntity(updatedUserModel)
 
     return userEntity
 }
-async function deleteUserById(ID: ListUserByIdUseCaseRequest): Promise<void> {
-    const repository = await Connection.getRepository(UserModel)
 
+async function deleteUserById(ID: string): Promise<void> {
+    const repository = await Connection.getRepository(UserModel)
+    
     await repository.delete({ ID })
 }
 
@@ -60,6 +56,7 @@ export {
     createUser,
     listUserById,
     listUsers,
-    deleteUserById
+    deleteUserById,
+    updateUserById
 };
 

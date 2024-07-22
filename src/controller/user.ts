@@ -1,7 +1,7 @@
 import { Request, Response } from "express"
-import { CreateUserUserCaseRepository, DeleteUserByIdUseCaseRepository, ListUserByIdUseCaseRepository, ListUsersUseCaseRepository } from "../repository/user"
+import { CreateUserUserCaseRepository, DeleteUserByIdUseCaseRepository, ListUserByIdUseCaseRepository, ListUsersUseCaseRepository, UpdateUserByIdUseCaseRepository } from "../repository/user"
 import { CreateUserUseCaseRequest } from "../useCase/ucio/user"
-import { CreateUserUseCase, deleteUserByIdUseCase, ListUserByIdUseCase, ListUsersUseCase } from "../useCase/user"
+import { CreateUserUseCase, deleteUserByIdUseCase, ListUserByIdUseCase, ListUsersUseCase, UpdateUserByIdUseCase } from "../useCase/user"
 import { CreateUserUseCaseValidate, ListUserByIdUseCaseValidate } from "../validate/user"
 class CreateUserController {
     async createUser(req: Request, res: Response) {
@@ -42,7 +42,7 @@ class ListUserByIdController {
     async listUserById(req: Request, res: Response) {
         try {
             const { ID } = req.body
-            
+
             const repository = new ListUserByIdUseCaseRepository
             const validate = new ListUserByIdUseCaseValidate
             const useCase = new ListUserByIdUseCase(repository, validate)
@@ -59,19 +59,33 @@ class ListUserByIdController {
         }
     }
 }
+class UpdateUserByIdController {
+    async UpdateUserById(req: Request, res: Response) {
+        try {
+
+            const repository = new UpdateUserByIdUseCaseRepository
+            const useCase = new UpdateUserByIdUseCase(repository)
+
+            await useCase.UpdateUserById(req.body)
+
+            res.status(200).json({ message: "usuário Atualizado com sucesso!" })
+        } catch (error) {
+            console.error("Erro ao atulizar usuário:", error)
+            res.status(500).json({ error: "Erro ao processar a requisição" })
+        }
+    }
+}
 class DeleteUserByIdController {
     async deleteUserById(req: Request, res: Response) {
         try {
-            const { ID } = req.body
-            
             const repository = new DeleteUserByIdUseCaseRepository
             const useCase = new deleteUserByIdUseCase(repository)
 
-           await useCase.deleteUserById(ID)
+            await useCase.deleteUserById(req.body)
 
-            res.status(200).json({message: "usuário deletado com sucesso!"})
+            res.status(200).json({ message: "usuário deletado com sucesso!" })
         } catch (error) {
-            console.error("Erro ao listar usuário:", error)
+            console.error("Erro ao deletar usuário:", error)
             res.status(500).json({ error: "Erro ao processar a requisição" })
         }
     }
@@ -81,6 +95,7 @@ export {
     CreateUserController,
     ListUserByIdController,
     ListUsersController,
+    UpdateUserByIdController,
     DeleteUserByIdController
 }
 

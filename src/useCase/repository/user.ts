@@ -14,7 +14,7 @@ interface UpdateUsersByIdUseCaseRepositoryInterface {
     updateUserById(ID: UpdateUserByIdUseCaseRequest): Promise<UserEntity>
 }
 interface DeleteUsersByIdUseCaseRepositoryInterface {
-    deleteUserById(ID: DeleteUserByIdUseCaseRequest): Promise<void>
+    deleteUserById(ID: string): Promise<void>
 }
 
 export {

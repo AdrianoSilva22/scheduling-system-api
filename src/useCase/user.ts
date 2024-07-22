@@ -1,8 +1,9 @@
+import { hash } from "bcryptjs"
 import { UserEntity } from "../entity/user"
 import { passwordHash } from "../utils/passwordHashUtils"
 import { generateUUID } from "../utils/uuid"
-import { CreateUserUseCaseRepositoryInterface, DeleteUsersByIdUseCaseRepositoryInterface, ListUsersByIdUseCaseRepositoryInterface, ListUsersUseCaseRepositoryInterface } from "./repository/user"
-import { CreateUserUseCaseRequest, CreateUserUseCaseResponse, DeleteUserByIdUseCaseResponse, ListUserByIdUseCaseRequest, ListUserByIdUseCaseResponse, ListUsersUseCaseResponse } from "./ucio/user"
+import { CreateUserUseCaseRepositoryInterface, DeleteUsersByIdUseCaseRepositoryInterface, ListUsersByIdUseCaseRepositoryInterface, ListUsersUseCaseRepositoryInterface, UpdateUsersByIdUseCaseRepositoryInterface } from "./repository/user"
+import { CreateUserUseCaseRequest, CreateUserUseCaseResponse, DeleteUserByIdUseCaseRequest, DeleteUserByIdUseCaseResponse, ListUserByIdUseCaseRequest, ListUserByIdUseCaseResponse, ListUsersUseCaseResponse, UpdateUserByIdUseCaseRequest, UpdteUserByIdUseCaseResponse } from "./ucio/user"
 import { CreateUserUseCaseValidateInterface, ListUserByIdUseCaseValidateInterface } from "./validate/user"
 
 class CreateUserUseCase {
@@ -81,23 +82,50 @@ class ListUserByIdUseCase {
         this.validate = validate
     }
 
-    async listUserById(req: ListUserByIdUseCaseRequest ): Promise<ListUserByIdUseCaseResponse> {
+    async listUserById(req: ListUserByIdUseCaseRequest): Promise<ListUserByIdUseCaseResponse> {
         try {
             const errorMessage = await this.validate.validateUserById(req)
-            
-            
+
+
             if (errorMessage) {
                 console.log('PRE_CONDITIONAL_ERROR', errorMessage)
                 return new ListUserByIdUseCaseResponse(errorMessage)
             }
 
             const user = await this.repository.listUserById(req)
-            
+
             return new ListUserByIdUseCaseResponse(user)
 
         } catch (error: any) {
             console.log('INTERNAL_SERVER_ERROR', error)
             return new ListUserByIdUseCaseResponse(error)
+        }
+    }
+}
+class UpdateUserByIdUseCase {
+    repository: UpdateUsersByIdUseCaseRepositoryInterface
+    constructor(repository: UpdateUsersByIdUseCaseRepositoryInterface
+    ) {
+        this.repository = repository
+    }
+
+    async UpdateUserById(req: UpdateUserByIdUseCaseRequest): Promise<UpdteUserByIdUseCaseResponse> {
+        try {
+            let { password } = req
+            console.log(password);
+
+            if (password) {
+                const passwordHashUpdate = await passwordHash(password)
+                password = passwordHashUpdate
+            }
+
+            const user = await this.repository.updateUserById(req)
+
+            return new UpdteUserByIdUseCaseResponse(user)
+
+        } catch (error: any) {
+            console.log('INTERNAL_SERVER_ERROR', error)
+            return new UpdteUserByIdUseCaseResponse(error)
         }
     }
 }
@@ -108,10 +136,11 @@ class deleteUserByIdUseCase {
         this.repository = repository
     }
 
-    async deleteUserById(req: ListUserByIdUseCaseRequest ): Promise<DeleteUserByIdUseCaseResponse> {
+    async deleteUserById(req: ListUserByIdUseCaseRequest): Promise<DeleteUserByIdUseCaseResponse> {
         try {
-            const user = await this.repository.deleteUserById(req)
-            
+            const { ID } = req
+            const user = await this.repository.deleteUserById(ID)
+
             return new DeleteUserByIdUseCaseResponse(null)
 
         } catch (error: any) {
@@ -125,5 +154,6 @@ export {
     CreateUserUseCase,
     ListUserByIdUseCase,
     ListUsersUseCase,
+    UpdateUserByIdUseCase,
     deleteUserByIdUseCase
 }
