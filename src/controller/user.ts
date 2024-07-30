@@ -6,9 +6,9 @@ import { CreateUserUseCaseValidate, ListUserByIdUseCaseValidate } from "../valid
 class CreateUserController {
     async createUser(req: Request, res: Response) {
         try {
-            const { name, email, password, phone } = req.body
+            const { name, email, password, phone, role } = req.body
 
-            const ucReq = new CreateUserUseCaseRequest(name, email, password, phone)
+            const ucReq = new CreateUserUseCaseRequest(name, email, password, phone, role)
 
             const validate = new CreateUserUseCaseValidate
             const repository = new CreateUserUserCaseRepository

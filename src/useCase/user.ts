@@ -27,7 +27,7 @@ class CreateUserUseCase {
                 return new CreateUserUseCaseResponse(errorMessage)
             }
 
-            const { name, email, phone, password } = req
+            const { name, email, phone, password, role } = req
 
             const UUID = generateUUID()
 
@@ -40,6 +40,7 @@ class CreateUserUseCase {
                     email,
                     await passwordHash(password),
                     phone,
+                    role,
                     now,
                     now))
             return new CreateUserUseCaseResponse(null)
@@ -111,12 +112,11 @@ class UpdateUserByIdUseCase {
 
     async UpdateUserById(req: UpdateUserByIdUseCaseRequest): Promise<UpdteUserByIdUseCaseResponse> {
         try {
-            let { password } = req
-            console.log(password);
+            const { password } = req
 
             if (password) {
                 const passwordHashUpdate = await passwordHash(password)
-                password = passwordHashUpdate
+                req.password = passwordHashUpdate
             }
 
             const user = await this.repository.updateUserById(req)

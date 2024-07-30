@@ -5,12 +5,14 @@ class CreateUserUseCaseRequest {
     email: string
     password: string
     phone: string
+    role: "manager" | "professional" | "cliente"
 
-    constructor(name: string, email: string, password: string, phone: string) {
+    constructor(name: string, email: string, password: string, phone: string, role: "manager" | "professional" | "cliente") {
         this.name = name
         this.email = email
         this.password = password
         this.phone = phone
+        this.role = role
     }
 }
 class CreateUserUseCaseResponse {

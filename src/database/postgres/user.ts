@@ -3,7 +3,6 @@ import { ListUserByIdUseCaseRequest, UpdateUserByIdUseCaseRequest } from "../../
 import { Connection } from "./connection";
 import { UserModel } from "./model/user";
 import { toUserEntity, toUserModel } from "./transformer/user";
-import bcrypt from "bcryptjs"
 
 async function createUser(userEntity: UserEntity): Promise<void> {
     const repository = await Connection.getRepository(UserModel)
