@@ -17,7 +17,7 @@ class UserModel {
   @Column({ type: 'varchar', length: '255' })
   phone: string
 
-  @Column({ type: 'varchar', length: 50 })
+  @Column({ type: 'varchar', length: '50' })
   role: "manager" | "professional" | "client"
 
   @Column({ type: 'timestamp', name: 'created_at' })

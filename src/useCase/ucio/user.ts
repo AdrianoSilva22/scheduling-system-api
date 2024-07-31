@@ -5,9 +5,9 @@ class CreateUserUseCaseRequest {
     email: string
     password: string
     phone: string
-    role: "manager" | "professional" | "cliente"
+    role: "manager" | "professional" | "client"
 
-    constructor(name: string, email: string, password: string, phone: string, role: "manager" | "professional" | "cliente") {
+    constructor(name: string, email: string, password: string, phone: string, role: "manager" | "professional" | "client") {
         this.name = name
         this.email = email
         this.password = password
