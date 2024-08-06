@@ -1,3 +1,4 @@
+import { SchedulingEntity } from "../../entity/scheduling"
 import { UserEntity } from "../../entity/user"
 
 class CreateUserUseCaseRequest {
@@ -6,13 +7,15 @@ class CreateUserUseCaseRequest {
     password: string
     phone: string
     role: "manager" | "professional" | "client"
+    scheduling?: SchedulingEntity[]
 
-    constructor(name: string, email: string, password: string, phone: string, role: "manager" | "professional" | "client") {
+    constructor(name: string, email: string, password: string, phone: string, role: "manager" | "professional" | "client", scheduling: SchedulingEntity[]) {
         this.name = name
         this.email = email
         this.password = password
         this.phone = phone
         this.role = role
+        this.scheduling = scheduling
     }
 }
 class CreateUserUseCaseResponse {

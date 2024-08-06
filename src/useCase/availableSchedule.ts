@@ -1,4 +1,5 @@
 import { AvailableScheduleEntity } from "../entity/availableSchedule";
+import { SchedulingEntity } from "../entity/scheduling";
 import { generateUUID } from "../utils/uuid";
 import { CreateAvailableScheduleUseCaseRepositoryInterface } from "./repository/availableSchedule";
 import { CreateAvailableScheduleUseCaseRequest, CreateAvailableScheduleUseCaseResponse } from "./ucio/availableSchedule";
@@ -22,12 +23,12 @@ class CreateAvailableScheduleUseCase {
                 return new CreateAvailableScheduleUseCaseResponse(errorMessage)
             }
 
-            const { dateTime } = req
+            const { dateTime, scheduling } = req
             const UUID = generateUUID()
             const now = new Date()
 
 
-            this.repository.createAvailableSchedule(new AvailableScheduleEntity(UUID, dateTime, now, now))
+            this.repository.createAvailableSchedule(new AvailableScheduleEntity(UUID, dateTime, scheduling ?? null, now, now))
             
             return new CreateAvailableScheduleUseCaseResponse(null)
         } catch (error: any) {

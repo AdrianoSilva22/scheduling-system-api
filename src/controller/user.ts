@@ -6,9 +6,9 @@ import { CreateUserUseCaseValidate, ListUserByIdUseCaseValidate } from "../valid
 class CreateUserController {
     async createUser(req: Request, res: Response) {
         try {
-            const { name, email, password, phone, role } = req.body
+            const { name, email, password, phone, role, scheduling } = req.body
 
-            const ucReq = new CreateUserUseCaseRequest(name, email, password, phone, role)
+            const ucReq = new CreateUserUseCaseRequest(name, email, password, phone, role, scheduling)
 
             const validate = new CreateUserUseCaseValidate
             const repository = new CreateUserUserCaseRepository
@@ -18,7 +18,7 @@ class CreateUserController {
 
             res.status(201).json({ message: "Usuário criado com sucesso" })
         } catch (error) {
-            console.error("Erro ao criar motorista:", error)
+            console.error("Erro ao criar usuário:", error)
             res.status(500).json({ error: "Erro ao processar a requisição" })
         }
     }

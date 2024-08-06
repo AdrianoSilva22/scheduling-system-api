@@ -27,7 +27,7 @@ class CreateUserUseCase {
                 return new CreateUserUseCaseResponse(errorMessage)
             }
 
-            const { name, email, phone, password, role } = req
+            const { name, email, phone, password, role, scheduling} = req
 
             const UUID = generateUUID()
 
@@ -41,6 +41,7 @@ class CreateUserUseCase {
                     await passwordHash(password),
                     phone,
                     role,
+                    scheduling ?? [],
                     now,
                     now))
             return new CreateUserUseCaseResponse(null)

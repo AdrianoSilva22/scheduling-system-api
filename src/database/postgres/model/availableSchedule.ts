@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { SchedulingEntity } from "../../../entity/scheduling";
 
 @Entity({ schema: 'public', name: 'available_schedule' })
 class AvailableScheduleModel {
@@ -7,6 +8,9 @@ class AvailableScheduleModel {
 
     @Column({ type: 'varchar', name: 'date_time' })
     dateTime: Date
+
+    @OneToOne(type => SchedulingEntity, scheduling => scheduling.horarioId)
+    scheduling?: SchedulingEntity | null
 
     @Column({ type: 'timestamp', name: 'created_at' })
     createdAt: Date
@@ -18,11 +22,13 @@ class AvailableScheduleModel {
     constructor(
         ID: string,
         dateTime: Date,
+        scheduling: SchedulingEntity,
         createdAt: Date,
         updatedAt: Date
     ) {
         this.ID = ID
-        this.dateTime= dateTime
+        this.dateTime = dateTime
+        this.scheduling = scheduling
         this.createdAt = createdAt
         this.updatedAt = updatedAt
     }

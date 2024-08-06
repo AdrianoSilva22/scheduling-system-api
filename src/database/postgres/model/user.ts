@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { SchedulingEntity } from "../../../entity/scheduling";
 
 @Entity({ schema: 'public', name: 'users' })
 class UserModel {
@@ -20,6 +21,9 @@ class UserModel {
   @Column({ type: 'varchar', length: '50' })
   role: "manager" | "professional" | "client"
 
+  @OneToMany(type => SchedulingEntity, scheduling => scheduling.clientId)
+  scheduling?: SchedulingEntity[]
+
   @Column({ type: 'timestamp', name: 'created_at' })
   createdAt: Date
 
@@ -34,6 +38,7 @@ class UserModel {
     password: string,
     phone: string,
     role: "manager" | "professional" | "client",
+    scheduling: SchedulingEntity[],
     createdAt: Date,
     updatedAt: Date
   ) {
@@ -43,6 +48,7 @@ class UserModel {
     this.password = password;
     this.phone = phone;
     this.role = role;
+    this.scheduling = scheduling
     this.createdAt = createdAt
     this.updatedAt = updatedAt
   }
