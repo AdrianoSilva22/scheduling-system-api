@@ -25,6 +25,6 @@ class UserEntity {
 }
 
 export {
-UserEntity
+  UserEntity
 }
 

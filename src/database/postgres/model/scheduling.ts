@@ -1,33 +1,41 @@
-import { Column, Entity, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm"
-import { UserEntity } from "../../../entity/user";
+import { Column, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { AvailableScheduleEntity } from "../../../entity/availableSchedule";
-
+import { UserEntity } from "../../../entity/user";
+import { AvailableScheduleModel } from "./availableSchedule";
+import { UserModel } from "./user";
 @Entity({ schema: 'public', name: 'scheduling' })
 class SchedulingModel {
-    @PrimaryGeneratedColumn('uuid', {name: 'id'})
-    ID: string
+    @PrimaryGeneratedColumn('uuid', { name: 'id' })
+    ID: string;
 
-    @ManyToOne(type => UserEntity, user => user.scheduling)
-    clientId: string
+    @ManyToOne(() => UserModel, user => user.scheduling)
+    @JoinColumn({ name: 'client_id' })
+    client: UserEntity; 
 
-    @OneToOne(type => AvailableScheduleEntity, avaibleSchedule => avaibleSchedule.scheduling)
-    horarioId: string
+    @OneToOne(() => AvailableScheduleModel, availableSchedule => availableSchedule.scheduling)
+    @JoinColumn({ name: 'horario_id' })
+    horario: AvailableScheduleEntity;  
 
-    @Column()
-    createdAt: Date
+    @Column({ type: 'timestamp', name: 'created_at' })
+    createdAt: Date;
 
-    @Column()
-    updatedAt: Date
+    @Column({ type: 'timestamp', name: 'updated_at' })
+    updatedAt: Date;
 
-    constructor(ID: string, clientId: string, horarioId: string, createdAt: Date, updatedAt: Date) {
-        this.ID = ID
-        this.clientId = clientId
-        this.horarioId = horarioId
-        this.createdAt = createdAt
-        this.updatedAt = updatedAt
+    constructor(
+        ID: string,
+        client: UserEntity,
+        horario: AvailableScheduleEntity,
+        createdAt: Date,
+        updatedAt: Date
+    ) {
+        this.ID = ID;
+        this.client = client;
+        this.horario = horario;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
     }
 }
 
-export {
-    SchedulingModel
-}
+export { SchedulingModel };
+

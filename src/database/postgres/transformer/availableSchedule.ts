@@ -14,4 +14,5 @@ function toAvailableScheduleModel(e: AvailableScheduleEntity): AvailableSchedule
 export {
     toAvailableScheduleEntity,
     toAvailableScheduleModel
-}
+};
+

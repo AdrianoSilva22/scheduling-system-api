@@ -92,10 +92,8 @@ class DeleteUserByIdController {
 }
 
 export {
-    CreateUserController,
-    ListUserByIdController,
+    CreateUserController, DeleteUserByIdController, ListUserByIdController,
     ListUsersController,
-    UpdateUserByIdController,
-    DeleteUserByIdController
+    UpdateUserByIdController
 }
 

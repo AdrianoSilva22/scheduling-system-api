@@ -18,4 +18,4 @@ class AvailableScheduleEntity {
 
 export {
     AvailableScheduleEntity
-}
+};
