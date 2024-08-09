@@ -1,12 +1,12 @@
 import { Router } from "express";
 import { CreateSchedulingController } from "../controller/scheduling";
 
-class RouterSheduling {
+class RouterScheduling {
     private router: Router
 
     constructor() {
         this.router = Router()
-        this.router.post('createScheduling', new CreateSchedulingController().createAvailableSchedule)
+        this.router.post('/createScheduling', new CreateSchedulingController().createScheduling)
     }
     getRouter(): Router {
         return this.router
@@ -14,5 +14,5 @@ class RouterSheduling {
 }
 
 export {
-    RouterSheduling
+    RouterScheduling
 }

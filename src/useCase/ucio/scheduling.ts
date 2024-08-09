@@ -1,9 +1,12 @@
-class CreateSchedulingUseCaseRequest {
-    clientId: string
-    horarioId: string
+import { AvailableScheduleEntity } from "../../entity/availableSchedule"
+import { UserEntity } from "../../entity/user"
 
-    constructor(clientId: string, horarioId: string) {
-        this.clientId = clientId
+class CreateSchedulingUseCaseRequest {
+    client: UserEntity
+    horarioId: AvailableScheduleEntity
+
+    constructor(client: UserEntity, horarioId: AvailableScheduleEntity) {
+        this.client = client
         this.horarioId = horarioId
     }
 }

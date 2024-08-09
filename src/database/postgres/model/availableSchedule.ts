@@ -1,5 +1,6 @@
 import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { SchedulingModel } from "./scheduling";
+import { SchedulingEntity } from "../../../entity/scheduling";
 
 @Entity({ schema: 'public', name: 'available_schedule' })
 class AvailableScheduleModel {
@@ -8,9 +9,6 @@ class AvailableScheduleModel {
 
     @Column({ type: 'timestamp', name: 'date_time' })
     dateTime: Date;
-
-    @OneToOne(() => SchedulingModel, scheduling => scheduling.horario)
-    scheduling?: SchedulingModel | null;
 
     @Column({ type: 'timestamp', name: 'created_at' })
     createdAt: Date;
@@ -21,13 +19,11 @@ class AvailableScheduleModel {
     constructor(
         ID: string,
         dateTime: Date,
-        scheduling: SchedulingModel | null,
         createdAt: Date,
         updatedAt: Date
     ) {
         this.ID = ID;
         this.dateTime = dateTime;
-        this.scheduling = scheduling;
         this.createdAt = createdAt;
          this.updatedAt = updatedAt;
     }

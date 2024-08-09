@@ -7,6 +7,9 @@ function checkNumberEmpty(e: number): boolean {
 function checkStringEmpty(e: string): boolean {
     return e === undefined || e === null || e.trim() === ''
 }
+function checkEmpty(e: any): boolean {
+    return false
+}
 
 function checkListEmpty(arr: Array<any>): boolean {
     return arr === undefined || arr === null || arr.length <= 0
@@ -39,6 +42,7 @@ export {
     checkNumberEmpty,
     checkRowEmptyFile,
     checkStringEmpty,
-    checkUuid
+    checkUuid,
+    checkEmpty
 }
 

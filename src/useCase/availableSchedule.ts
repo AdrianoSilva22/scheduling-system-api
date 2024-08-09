@@ -28,7 +28,7 @@ class CreateAvailableScheduleUseCase {
             const now = new Date()
 
 
-            this.repository.createAvailableSchedule(new AvailableScheduleEntity(UUID, dateTime, scheduling ?? null, now, now))
+            this.repository.createAvailableSchedule(new AvailableScheduleEntity(UUID, dateTime, now, now))
             
             return new CreateAvailableScheduleUseCaseResponse(null)
         } catch (error: any) {

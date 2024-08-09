@@ -6,18 +6,18 @@ import { CreateSchedulingUseCase } from "../useCase/scheduling";
 import { CreateSchedulingUseCaseValidate } from "../validate/scheduling";
 
 class CreateSchedulingController {
-    async createAvailableSchedule(req: Request, res: Response) {
+    async createScheduling(req: Request, res: Response) {
 
         try {
-            const { clientId, horarioId } = req.body
-            const ucReq = new CreateSchedulingUseCaseRequest(clientId, horarioId)
+            const { client, horarioId } = req.body
+            const ucReq = new CreateSchedulingUseCaseRequest(client, horarioId)
 
             const repository = new CreateSchedulingUseCaseRepository
             const validate = new CreateSchedulingUseCaseValidate
             const useCase = new CreateSchedulingUseCase(repository, validate)
 
             await useCase.createScheduling(ucReq)
-
+            
             res.status(201).json({ message: "Agendamento criado com sucesso!" })
         } catch (error) {
             console.error("Erro ao criar agendamento:", error)

@@ -8,12 +8,12 @@ class SchedulingModel {
     @PrimaryGeneratedColumn('uuid', { name: 'id' })
     ID: string;
 
-    @ManyToOne(() => UserModel, user => user.scheduling)
-    @JoinColumn({ name: 'client_id' })
+    @ManyToOne(() => UserModel)
+    @JoinColumn()
     client: UserEntity; 
 
-    @OneToOne(() => AvailableScheduleModel, availableSchedule => availableSchedule.scheduling)
-    @JoinColumn({ name: 'horario_id' })
+    @OneToOne(() => AvailableScheduleModel)
+    @JoinColumn()
     horario: AvailableScheduleEntity;  
 
     @Column({ type: 'timestamp', name: 'created_at' })
