@@ -33,6 +33,8 @@ class CreateUserUseCase {
 
             const now = new Date()
 
+            const status = "ATIVO"
+
             await this.repository.createUser(
                 new UserEntity(
                     UUID,
@@ -41,6 +43,7 @@ class CreateUserUseCase {
                     await passwordHash(password),
                     phone,
                     role,
+                    status,
                     now,
                     now))
             return new CreateUserUseCaseResponse(null)

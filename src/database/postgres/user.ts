@@ -34,11 +34,13 @@ async function listUserById(ID: ListUserByIdUseCaseRequest): Promise<UserEntity>
 
 async function updateUserById(req: UpdateUserByIdUseCaseRequest): Promise<UserEntity> {
     const { ID, ...userProps } = req
-    
+
     const repository = await Connection.getRepository(UserModel)
 
     await repository.update(ID, userProps)
+
     const updatedUserModel = await repository.findOneBy({ ID });
+    
     const userEntity = toUserEntity(updatedUserModel)
 
     return userEntity
@@ -46,9 +48,20 @@ async function updateUserById(req: UpdateUserByIdUseCaseRequest): Promise<UserEn
 
 async function deleteUserById(ID: string): Promise<void> {
     const repository = await Connection.getRepository(UserModel)
-    
+
     await repository.delete({ ID })
 }
+async function loginUser(email: string): Promise<UserEntity> {
+    const repository = await Connection.getRepository(UserModel);
+    
+    const userModel: UserModel = await repository.findOne({ where: { email } });
+    
+    const userEntity = toUserEntity(userModel)
+
+    return userEntity
+}
+
+
 
 
 export {
@@ -56,6 +69,7 @@ export {
     listUserById,
     listUsers,
     deleteUserById,
-    updateUserById
+    updateUserById,
+    loginUser
 };
 

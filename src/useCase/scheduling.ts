@@ -2,7 +2,6 @@ import { SchedulingEntity } from "../entity/scheduling";
 import { generateUUID } from "../utils/uuid";
 import { CreateScheduleUseCaseRepositoryInterface } from "./repository/scheduling";
 import { CreateSchedulingUseCaseRequest, CreateSchedulingUseCaseResponse } from "./ucio/scheduling";
-import { CreateAvailableScheduleUseCaseValidateInterface } from "./validate/availableSchedule";
 import { CreateSchedulingUseCaseValidateInterface } from "./validate/scheduling";
 
 class CreateSchedulingUseCase {

@@ -8,8 +8,8 @@ class CreateAvailableScheduleController {
     async createAvailableSchedule(req: Request, res: Response) {
 
         try {
-            const { dateTime, scheduling } = req.body
-            const ucReq = new CreateAvailableScheduleUseCaseRequest(dateTime, scheduling)
+            const { dateTime, professional } = req.body
+            const ucReq = new CreateAvailableScheduleUseCaseRequest(dateTime, professional)
 
             const repository = new CreateAvailableSchedulingUseCaseRepository
             const validate = new CreateAvailableScheduleUseCaseValidate

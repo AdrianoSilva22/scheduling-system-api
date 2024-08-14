@@ -1,32 +1,33 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { SchedulingEntity } from "../../../entity/scheduling";
-import { SchedulingModel } from "./scheduling";
 
 @Entity({ schema: 'public', name: 'user' })
 class UserModel {
   @PrimaryGeneratedColumn('uuid', { name: 'id' })
-  ID: string;
+  ID: string
 
   @Column({ type: 'varchar', length: 255 })
-  name: string;
+  name: string
 
   @Column({ type: 'varchar', length: 255, unique: true })
-  email: string;
+  email: string
 
   @Column({ type: 'varchar', length: 255 })
-  password: string;
+  password: string
 
   @Column({ type: 'varchar', length: 255 })
-  phone: string;
+  phone: string
 
   @Column({ type: 'varchar', length: 50 })
-  role: "manager" | "professional" | "client";
+  role: "manager" | "professional" | "client"
+
+  @Column({ type: 'varchar', length: 50 })
+  status: "ATIVO" | "INATIVO"
 
   @Column({ type: 'timestamp', name: 'created_at' })
-  createdAt: Date;
+  createdAt: Date
 
   @Column({ type: 'timestamp', name: 'updated_at' })
-  updatedAt: Date;
+  updatedAt: Date
 
   constructor(
     ID: string,
@@ -35,6 +36,7 @@ class UserModel {
     password: string,
     phone: string,
     role: "manager" | "professional" | "client",
+    status: "ATIVO" | "INATIVO",
     createdAt: Date,
     updatedAt: Date
   ) {
@@ -44,6 +46,7 @@ class UserModel {
     this.password = password;
     this.phone = phone;
     this.role = role;
+    this.status = status
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
   }

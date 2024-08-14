@@ -8,7 +8,7 @@ function checkStringEmpty(e: string): boolean {
     return e === undefined || e === null || e.trim() === ''
 }
 function checkEmpty(e: any): boolean {
-    return false
+    return e ==! undefined || e ==! null || e ==! ''
 }
 
 function checkListEmpty(arr: Array<any>): boolean {

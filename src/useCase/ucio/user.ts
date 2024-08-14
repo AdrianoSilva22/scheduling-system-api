@@ -103,6 +103,27 @@ class DeleteUserByIdUseCaseResponse {
     }
 }
 
+class LoginUserUseCaseRequest {
+    email: string
+    password: string
+
+    constructor(email: string, password: string) {
+        this.email = email
+        this.password = password
+    }
+}
+
+class LoginUserUseCaseResponse {
+    error: string | null
+    
+    constructor(error : string | null){
+        this.error = error
+    }
+
+}
+
+
+
 export {
     CreateUserUseCaseRequest,
     CreateUserUseCaseResponse,
@@ -112,6 +133,8 @@ export {
     UpdateUserByIdUseCaseRequest,
     UpdteUserByIdUseCaseResponse,
     DeleteUserByIdUseCaseRequest,
-    DeleteUserByIdUseCaseResponse
+    DeleteUserByIdUseCaseResponse,
+    LoginUserUseCaseRequest,
+    LoginUserUseCaseResponse
 }
 

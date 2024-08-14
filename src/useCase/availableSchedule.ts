@@ -23,12 +23,11 @@ class CreateAvailableScheduleUseCase {
                 return new CreateAvailableScheduleUseCaseResponse(errorMessage)
             }
 
-            const { dateTime, scheduling } = req
+            const { dateTime, professional } = req
             const UUID = generateUUID()
             const now = new Date()
 
-
-            this.repository.createAvailableSchedule(new AvailableScheduleEntity(UUID, dateTime, now, now))
+            this.repository.createAvailableSchedule(new AvailableScheduleEntity(UUID, dateTime, professional, now, now))
             
             return new CreateAvailableScheduleUseCaseResponse(null)
         } catch (error: any) {

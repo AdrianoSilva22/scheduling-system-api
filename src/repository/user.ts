@@ -1,6 +1,6 @@
-import { createUser, deleteUserById, listUserById, listUsers, updateUserById } from "../database/postgres/user";
+import { createUser, deleteUserById, listUserById, listUsers, loginUser, updateUserById } from "../database/postgres/user";
 import { UserEntity } from "../entity/user";
-import { CreateUserUseCaseRepositoryInterface, DeleteUsersByIdUseCaseRepositoryInterface, ListUsersByIdUseCaseRepositoryInterface, ListUsersUseCaseRepositoryInterface, UpdateUsersByIdUseCaseRepositoryInterface } from "../useCase/repository/user";
+import { CreateUserUseCaseRepositoryInterface, DeleteUsersByIdUseCaseRepositoryInterface, ListUsersByIdUseCaseRepositoryInterface, ListUsersUseCaseRepositoryInterface, LoginUserUseCaseRepositoryInterface, UpdateUsersByIdUseCaseRepositoryInterface } from "../useCase/repository/user";
 import { DeleteUserByIdUseCaseRequest, ListUserByIdUseCaseRequest, UpdateUserByIdUseCaseRequest } from "../useCase/ucio/user";
 
 class CreateUserUserCaseRepository implements CreateUserUseCaseRepositoryInterface {
@@ -27,7 +27,12 @@ class UpdateUserByIdUseCaseRepository implements UpdateUsersByIdUseCaseRepositor
 }
 class DeleteUserByIdUseCaseRepository implements DeleteUsersByIdUseCaseRepositoryInterface {
     async deleteUserById(ID: string): Promise<void> {
-       await deleteUserById(ID)
+        await deleteUserById(ID)
+    }
+}
+class LoginUserUseCaseRepository implements LoginUserUseCaseRepositoryInterface {
+    async LoginUser(email: string): Promise<UserEntity> {
+        return await loginUser(email)
     }
 }
 
@@ -36,6 +41,7 @@ export {
     ListUserByIdUseCaseRepository,
     ListUsersUseCaseRepository,
     UpdateUserByIdUseCaseRepository,
-    DeleteUserByIdUseCaseRepository
+    DeleteUserByIdUseCaseRepository,
+    LoginUserUseCaseRepository
 };
 

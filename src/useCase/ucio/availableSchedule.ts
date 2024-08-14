@@ -1,11 +1,12 @@
 import { SchedulingEntity } from "../../entity/scheduling";
+import { UserEntity } from "../../entity/user";
 
 class CreateAvailableScheduleUseCaseRequest {
     dateTime: Date;
-    scheduling?: SchedulingEntity;
+    professional: UserEntity;
 
-    constructor(dateTime: Date, scheduling: SchedulingEntity) {
-        this.scheduling = scheduling
+    constructor(dateTime: Date, professional: UserEntity) {
+        this.professional = professional
         this.dateTime = dateTime
     }
 }
