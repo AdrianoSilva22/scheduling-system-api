@@ -1,5 +1,5 @@
 import { UserEntity } from "../../entity/user"
-import { DeleteUserByIdUseCaseRequest, ListUserByIdUseCaseRequest, UpdateUserByIdUseCaseRequest } from "../ucio/user"
+import { ListUserByIdUseCaseRequest, UpdateUserByIdUseCaseRequest } from "../ucio/user"
 
 interface CreateUserUseCaseRepositoryInterface {
     createUser(user: UserEntity): Promise<void>
@@ -22,11 +22,7 @@ interface LoginUserUseCaseRepositoryInterface {
 }
 
 export {
-    CreateUserUseCaseRepositoryInterface,
-    ListUsersByIdUseCaseRepositoryInterface,
-    ListUsersUseCaseRepositoryInterface,
-    UpdateUsersByIdUseCaseRepositoryInterface,
-    DeleteUsersByIdUseCaseRepositoryInterface,
-    LoginUserUseCaseRepositoryInterface
+    CreateUserUseCaseRepositoryInterface, DeleteUsersByIdUseCaseRepositoryInterface, ListUsersByIdUseCaseRepositoryInterface,
+    ListUsersUseCaseRepositoryInterface, LoginUserUseCaseRepositoryInterface, UpdateUsersByIdUseCaseRepositoryInterface
 }
 

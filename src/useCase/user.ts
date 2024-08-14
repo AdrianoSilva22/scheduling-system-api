@@ -1,19 +1,16 @@
-import { hash } from "bcryptjs"
+import { compare } from "bcryptjs"
 import { UserEntity } from "../entity/user"
 import { passwordHash } from "../utils/passwordHashUtils"
 import { generateUUID } from "../utils/uuid"
-import { CreateUserUseCaseRepositoryInterface, DeleteUsersByIdUseCaseRepositoryInterface, ListUsersByIdUseCaseRepositoryInterface, ListUsersUseCaseRepositoryInterface, UpdateUsersByIdUseCaseRepositoryInterface } from "./repository/user"
-import { CreateUserUseCaseRequest, CreateUserUseCaseResponse, DeleteUserByIdUseCaseRequest, DeleteUserByIdUseCaseResponse, ListUserByIdUseCaseRequest, ListUserByIdUseCaseResponse, ListUsersUseCaseResponse, UpdateUserByIdUseCaseRequest, UpdteUserByIdUseCaseResponse } from "./ucio/user"
-import { CreateUserUseCaseValidateInterface, ListUserByIdUseCaseValidateInterface } from "./validate/user"
+import { CreateUserUseCaseRepositoryInterface, DeleteUsersByIdUseCaseRepositoryInterface, ListUsersByIdUseCaseRepositoryInterface, ListUsersUseCaseRepositoryInterface, LoginUserUseCaseRepositoryInterface, UpdateUsersByIdUseCaseRepositoryInterface } from "./repository/user"
+import { CreateUserUseCaseRequest, CreateUserUseCaseResponse, DeleteUserByIdUseCaseResponse, ListUserByIdUseCaseRequest, ListUserByIdUseCaseResponse, ListUsersUseCaseResponse, LoginUserUseCaseRequest, LoginUserUseCaseResponse, UpdateUserByIdUseCaseRequest, UpdteUserByIdUseCaseResponse } from "./ucio/user"
+import { CreateUserUseCaseValidateInterface, ListUserByIdUseCaseValidateInterface, LoginUserUseCaseValidateInterface } from "./validate/user"
 
 class CreateUserUseCase {
     validate: CreateUserUseCaseValidateInterface
     repository: CreateUserUseCaseRepositoryInterface
 
-    constructor(
-        validate: CreateUserUseCaseValidateInterface,
-        respository: CreateUserUseCaseRepositoryInterface
-    ) {
+    constructor(validate: CreateUserUseCaseValidateInterface, respository: CreateUserUseCaseRepositoryInterface) {
         this.validate = validate
         this.repository = respository
     }
@@ -59,8 +56,7 @@ class CreateUserUseCase {
 class ListUsersUseCase {
     repository: ListUsersUseCaseRepositoryInterface
 
-    constructor(repository: ListUsersUseCaseRepositoryInterface
-    ) {
+    constructor(repository: ListUsersUseCaseRepositoryInterface) {
         this.repository = repository
     }
 
@@ -80,8 +76,8 @@ class ListUsersUseCase {
 class ListUserByIdUseCase {
     repository: ListUsersByIdUseCaseRepositoryInterface
     validate: ListUserByIdUseCaseValidateInterface
-    constructor(repository: ListUsersByIdUseCaseRepositoryInterface, validate: ListUserByIdUseCaseValidateInterface
-    ) {
+
+    constructor(repository: ListUsersByIdUseCaseRepositoryInterface, validate: ListUserByIdUseCaseValidateInterface) {
         this.repository = repository
         this.validate = validate
     }
@@ -108,8 +104,8 @@ class ListUserByIdUseCase {
 }
 class UpdateUserByIdUseCase {
     repository: UpdateUsersByIdUseCaseRepositoryInterface
-    constructor(repository: UpdateUsersByIdUseCaseRepositoryInterface
-    ) {
+
+    constructor(repository: UpdateUsersByIdUseCaseRepositoryInterface) {
         this.repository = repository
     }
 
@@ -132,10 +128,10 @@ class UpdateUserByIdUseCase {
         }
     }
 }
-class deleteUserByIdUseCase {
+class DeleteUserByIdUseCase {
     repository: DeleteUsersByIdUseCaseRepositoryInterface
-    constructor(repository: DeleteUsersByIdUseCaseRepositoryInterface
-    ) {
+
+    constructor(repository: DeleteUsersByIdUseCaseRepositoryInterface) {
         this.repository = repository
     }
 
@@ -152,11 +148,52 @@ class deleteUserByIdUseCase {
         }
     }
 }
+class LoginUserUseCase {
+    repository: LoginUserUseCaseRepositoryInterface
+    validate: LoginUserUseCaseValidateInterface
+
+    constructor(repository: LoginUserUseCaseRepositoryInterface, validate: LoginUserUseCaseValidateInterface) {
+        this.repository = repository
+        this.validate = validate
+    }
+
+    async loginUser(req: LoginUserUseCaseRequest): Promise<LoginUserUseCaseResponse> {
+        try {
+            const { email, password } = req
+            const errorMessage = this.validate.validateLoginUser(req)
+
+            if (errorMessage) {
+                return new LoginUserUseCaseResponse(errorMessage)
+            }
+
+            const user = await this.repository.LoginUser(email)
+
+            if (!user) {
+                return new LoginUserUseCaseResponse("Usuário não registrado!")
+            }
+
+            const passwordHash = user.password
+            const passwordVerified = await compare(password, passwordHash)
+
+            if (!passwordVerified) {
+                return new LoginUserUseCaseResponse("Senha inválida!")
+            }
+
+            return new LoginUserUseCaseResponse(null)
+
+        } catch (error: any) {
+            console.log('INTERNAL_SERVER_ERROR', error)
+            return new DeleteUserByIdUseCaseResponse(error)
+        }
+    }
+}
 
 export {
     CreateUserUseCase,
+    DeleteUserByIdUseCase,
     ListUserByIdUseCase,
     ListUsersUseCase,
-    UpdateUserByIdUseCase,
-    deleteUserByIdUseCase
+    LoginUserUseCase,
+    UpdateUserByIdUseCase
 }
+

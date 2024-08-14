@@ -1,4 +1,3 @@
-import { SchedulingEntity } from "../../entity/scheduling"
 import { UserEntity } from "../../entity/user"
 
 class CreateUserUseCaseRequest {
@@ -126,15 +125,11 @@ class LoginUserUseCaseResponse {
 
 export {
     CreateUserUseCaseRequest,
-    CreateUserUseCaseResponse,
-    ListUserByIdUseCaseRequest,
+    CreateUserUseCaseResponse, DeleteUserByIdUseCaseRequest,
+    DeleteUserByIdUseCaseResponse, ListUserByIdUseCaseRequest,
     ListUserByIdUseCaseResponse,
-    ListUsersUseCaseResponse,
-    UpdateUserByIdUseCaseRequest,
-    UpdteUserByIdUseCaseResponse,
-    DeleteUserByIdUseCaseRequest,
-    DeleteUserByIdUseCaseResponse,
-    LoginUserUseCaseRequest,
-    LoginUserUseCaseResponse
+    ListUsersUseCaseResponse, LoginUserUseCaseRequest,
+    LoginUserUseCaseResponse, UpdateUserByIdUseCaseRequest,
+    UpdteUserByIdUseCaseResponse
 }
 
