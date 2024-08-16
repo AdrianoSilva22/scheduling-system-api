@@ -113,10 +113,12 @@ class LoginUserUseCaseRequest {
 }
 
 class LoginUserUseCaseResponse {
-    error: string | null
+    error?: string | null
+    userTokenJwt?: string
     
-    constructor(error : string | null){
+    constructor(error?: string | null, userTokenJwt?: string){
         this.error = error
+        this.userTokenJwt = userTokenJwt
     }
 
 }

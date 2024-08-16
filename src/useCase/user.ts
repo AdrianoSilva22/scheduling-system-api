@@ -2,9 +2,11 @@ import { compare } from "bcryptjs"
 import { UserEntity } from "../entity/user"
 import { passwordHash } from "../utils/passwordHashUtils"
 import { generateUUID } from "../utils/uuid"
+import { tokenUtils } from "../utils/authToken"
 import { CreateUserUseCaseRepositoryInterface, DeleteUsersByIdUseCaseRepositoryInterface, ListUsersByIdUseCaseRepositoryInterface, ListUsersUseCaseRepositoryInterface, LoginUserUseCaseRepositoryInterface, UpdateUsersByIdUseCaseRepositoryInterface } from "./repository/user"
 import { CreateUserUseCaseRequest, CreateUserUseCaseResponse, DeleteUserByIdUseCaseResponse, ListUserByIdUseCaseRequest, ListUserByIdUseCaseResponse, ListUsersUseCaseResponse, LoginUserUseCaseRequest, LoginUserUseCaseResponse, UpdateUserByIdUseCaseRequest, UpdteUserByIdUseCaseResponse } from "./ucio/user"
 import { CreateUserUseCaseValidateInterface, ListUserByIdUseCaseValidateInterface, LoginUserUseCaseValidateInterface } from "./validate/user"
+const { generateToken } = tokenUtils()
 
 class CreateUserUseCase {
     validate: CreateUserUseCaseValidateInterface
@@ -179,11 +181,13 @@ class LoginUserUseCase {
                 return new LoginUserUseCaseResponse("Senha inválida!")
             }
 
-            return new LoginUserUseCaseResponse(null)
+            const authToken = generateToken(user)
+
+            return new LoginUserUseCaseResponse(null, authToken)
 
         } catch (error: any) {
             console.log('INTERNAL_SERVER_ERROR', error)
-            return new DeleteUserByIdUseCaseResponse(error)
+            return new LoginUserUseCaseResponse(error)
         }
     }
 }

@@ -105,8 +105,8 @@ class LoginUserController {
             const user = (await useCase.loginUser(ucReq))
             if (user.error) {
                 res.status(200).json({ message: user.error })
-            } else {
-                res.status(200).json({ message: "Usuário Logado Sucesso!" })
+            } else if (user.userTokenJwt) {
+                res.status(200).json({ message: "Usuário Logado Sucesso!", userToken: user.userTokenJwt })
             }
         } catch (error) {
             console.error("ERRO INTERNO AO LOGAR:", error)
