@@ -106,7 +106,7 @@ class LoginUserController {
             if (user.error) {
                 res.status(200).json({ message: user.error })
             } else if (user.userTokenJwt) {
-                res.status(200).json({ message: "Usuário Logado Sucesso!", userToken: user.userTokenJwt })
+                res.status(200).json({ message: 'Login realizado com sucesso!', token: user.userTokenJwt });
             }
         } catch (error) {
             console.error("ERRO INTERNO AO LOGAR:", error)

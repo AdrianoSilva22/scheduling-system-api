@@ -23,7 +23,7 @@ export const tokenUtils = () => {
             }
 
             const token = jwt.sign(userJwtPayload, SECRET, {
-                expiresIn: '1h'
+                expiresIn: 3
             })
 
             return token
@@ -33,14 +33,14 @@ export const tokenUtils = () => {
         }
     }
 
-    const verifyToken = (req: IGetUserAuthInfoRequest, res: Response, next: NextFunction) => {
+    const checkAuthenticatedToken = (req: IGetUserAuthInfoRequest, res: Response, next: NextFunction) => {
         try {
             const headersToken = req.headers.authorization as string
-
+            
             if (!headersToken) { res.status(401).send("É necessário autenticar.") }
 
             const headersTokenWithoutBearer = headersToken.slice(7, headersToken.length)
-
+            
             jwt.verify(headersTokenWithoutBearer, process.env.SECRET as string, (err, decoded) => {
                 if (err) {
                     res.status(401).send({ message: "Token inválido" });
@@ -58,7 +58,7 @@ export const tokenUtils = () => {
 
     return {
         generateToken,
-        verifyToken
+        checkAuthenticatedToken
     }
 
 }

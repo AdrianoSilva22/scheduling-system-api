@@ -31,7 +31,6 @@ function checkUuid( req: ListUserByIdUseCaseRequest) {
     const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
    
     const idString = req as unknown as string;
-    console.log(uuidRegex.test(idString));
     return uuidRegex.test(idString);
 }
 
