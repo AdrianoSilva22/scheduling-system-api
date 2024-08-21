@@ -1,12 +1,30 @@
-// import { NextFunction, Request, Response } from "express";
+import { NextFunction, Response } from "express"
+import { IGetUserAuthInfoRequest } from ".."
+import jwt from "jsonwebtoken";
 
-// export function authUser(req: Request, res: Response, next: NextFunction) {
-//     const userTokenJwt = req.headers['authorization']
+const checkAuthenticatedToken = (req: IGetUserAuthInfoRequest, res: Response, next: NextFunction) => {
+    try {
+        const headersToken = req.headers.authorization as string
 
-//     if (req.user == null) {
-//       res.status(403);
-//       return res.send("you need to sign in ");
-//     }
-//     next();
-//    }
-   
+        if (!headersToken) { res.status(401).send("É necessário autenticar.") }
+
+        const headersTokenWithoutBearer = headersToken.slice(7, headersToken.length)
+
+        jwt.verify(headersTokenWithoutBearer, process.env.SECRET as string, (err, decoded) => {
+            if (err) {
+                res.status(401).send({ message: "Token inválido" });
+            } else {
+                req.user = decoded as { id: string; name: string; email: string; role: string };
+
+                next()
+            }
+        })
+    } catch (err) {
+        console.log(err)
+        res.status(500).send("Falha ao autenticar o token")
+    }
+}
+
+export {
+    checkAuthenticatedToken
+}

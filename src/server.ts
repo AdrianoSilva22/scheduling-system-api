@@ -16,12 +16,12 @@ dotenv.config()
 
 app.use(express.json())
 
+app.use(new RouterAuthUser().getRouter())
+
 app.use(new RouterUser().getRouter())
 
 app.use(new RouterAvailableSchedule().getRouter())
 
 app.use(new RouterScheduling().getRouter())
-
-app.use(new RouterAuthUser().getRouter())
 
 app.listen(PORT, () => console.log(`funcionando na porta ${PORT}`))

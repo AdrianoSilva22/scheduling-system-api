@@ -1,8 +1,8 @@
-import { UserEntity } from "../../entity/user";
-import { ListUserByIdUseCaseRequest, UpdateUserByIdUseCaseRequest } from "../../useCase/ucio/user";
-import { Connection } from "./connection";
-import { UserModel } from "./model/user";
-import { toUserEntity, toUserModel } from "./transformer/user";
+import { UserEntity } from "../../entity/user"
+import { ListUserByIdUseCaseRequest, UpdateUserByIdUseCaseRequest } from "../../useCase/ucio/user"
+import { Connection } from "./connection"
+import { UserModel } from "./model/user"
+import { toUserEntity, toUserModel } from "./transformer/user"
 
 async function createUser(userEntity: UserEntity): Promise<void> {
     const repository = await Connection.getRepository(UserModel)
@@ -51,25 +51,12 @@ async function deleteUserById(ID: string): Promise<void> {
 
     await repository.delete({ ID })
 }
-async function loginUser(email: string): Promise<UserEntity> {
-    const repository = await Connection.getRepository(UserModel);
-    
-    const userModel: UserModel = await repository.findOne({ where: { email } });
-    
-    const userEntity = toUserEntity(userModel)
-
-    return userEntity
-}
-
-
-
 
 export {
     createUser,
     listUserById,
     listUsers,
     deleteUserById,
-    updateUserById,
-    loginUser
-};
+    updateUserById
+}
 

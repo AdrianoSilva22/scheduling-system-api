@@ -17,12 +17,8 @@ interface DeleteUsersByIdUseCaseRepositoryInterface {
     deleteUserById(ID: string): Promise<void>
 }
 
-interface LoginUserUseCaseRepositoryInterface {
-    LoginUser(email: string): Promise<UserEntity>
-}
-
 export {
     CreateUserUseCaseRepositoryInterface, DeleteUsersByIdUseCaseRepositoryInterface, ListUsersByIdUseCaseRepositoryInterface,
-    ListUsersUseCaseRepositoryInterface, LoginUserUseCaseRepositoryInterface, UpdateUsersByIdUseCaseRepositoryInterface
+    ListUsersUseCaseRepositoryInterface, UpdateUsersByIdUseCaseRepositoryInterface
 }
 

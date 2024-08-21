@@ -2,11 +2,9 @@ import { compare } from "bcryptjs"
 import { UserEntity } from "../entity/user"
 import { passwordHash } from "../utils/passwordHashUtils"
 import { generateUUID } from "../utils/uuid"
-import { tokenUtils } from "../utils/authToken"
-import { CreateUserUseCaseRepositoryInterface, DeleteUsersByIdUseCaseRepositoryInterface, ListUsersByIdUseCaseRepositoryInterface, ListUsersUseCaseRepositoryInterface, LoginUserUseCaseRepositoryInterface, UpdateUsersByIdUseCaseRepositoryInterface } from "./repository/user"
-import { CreateUserUseCaseRequest, CreateUserUseCaseResponse, DeleteUserByIdUseCaseResponse, ListUserByIdUseCaseRequest, ListUserByIdUseCaseResponse, ListUsersUseCaseResponse, LoginUserUseCaseRequest, LoginUserUseCaseResponse, UpdateUserByIdUseCaseRequest, UpdteUserByIdUseCaseResponse } from "./ucio/user"
-import { CreateUserUseCaseValidateInterface, ListUserByIdUseCaseValidateInterface, LoginUserUseCaseValidateInterface } from "./validate/user"
-const { generateToken } = tokenUtils()
+import { CreateUserUseCaseRepositoryInterface, DeleteUsersByIdUseCaseRepositoryInterface, ListUsersByIdUseCaseRepositoryInterface, ListUsersUseCaseRepositoryInterface, UpdateUsersByIdUseCaseRepositoryInterface } from "./repository/user"
+import { CreateUserUseCaseRequest, CreateUserUseCaseResponse, DeleteUserByIdUseCaseResponse, ListUserByIdUseCaseRequest, ListUserByIdUseCaseResponse, ListUsersUseCaseResponse, UpdateUserByIdUseCaseRequest, UpdteUserByIdUseCaseResponse } from "./ucio/user"
+import { CreateUserUseCaseValidateInterface, ListUserByIdUseCaseValidateInterface } from "./validate/user"
 
 class CreateUserUseCase {
     validate: CreateUserUseCaseValidateInterface
@@ -150,54 +148,12 @@ class DeleteUserByIdUseCase {
         }
     }
 }
-class LoginUserUseCase {
-    repository: LoginUserUseCaseRepositoryInterface
-    validate: LoginUserUseCaseValidateInterface
-
-    constructor(repository: LoginUserUseCaseRepositoryInterface, validate: LoginUserUseCaseValidateInterface) {
-        this.repository = repository
-        this.validate = validate
-    }
-
-    async loginUser(req: LoginUserUseCaseRequest): Promise<LoginUserUseCaseResponse> {
-        try {
-            const { email, password } = req
-            const errorMessage = this.validate.validateLoginUser(req)
-
-            if (errorMessage) {
-                return new LoginUserUseCaseResponse(errorMessage)
-            }
-
-            const user = await this.repository.LoginUser(email)
-
-            if (!user) {
-                return new LoginUserUseCaseResponse("Usuário não registrado!")
-            }
-
-            const passwordHash = user.password
-            const passwordVerified = await compare(password, passwordHash)
-
-            if (!passwordVerified) {
-                return new LoginUserUseCaseResponse("Senha inválida!")
-            }
-
-            const authToken = generateToken(user)
-
-            return new LoginUserUseCaseResponse(null, authToken)
-
-        } catch (error: any) {
-            console.log('INTERNAL_SERVER_ERROR', error)
-            return new LoginUserUseCaseResponse(error)
-        }
-    }
-}
 
 export {
     CreateUserUseCase,
     DeleteUserByIdUseCase,
     ListUserByIdUseCase,
     ListUsersUseCase,
-    LoginUserUseCase,
     UpdateUserByIdUseCase
 }
 

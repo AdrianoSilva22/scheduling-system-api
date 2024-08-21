@@ -102,36 +102,13 @@ class DeleteUserByIdUseCaseResponse {
     }
 }
 
-class LoginUserUseCaseRequest {
-    email: string
-    password: string
-
-    constructor(email: string, password: string) {
-        this.email = email
-        this.password = password
-    }
-}
-
-class LoginUserUseCaseResponse {
-    error?: string | null
-    userTokenJwt?: string
-    
-    constructor(error?: string | null, userTokenJwt?: string){
-        this.error = error
-        this.userTokenJwt = userTokenJwt
-    }
-
-}
-
-
-
 export {
     CreateUserUseCaseRequest,
     CreateUserUseCaseResponse, DeleteUserByIdUseCaseRequest,
     DeleteUserByIdUseCaseResponse, ListUserByIdUseCaseRequest,
     ListUserByIdUseCaseResponse,
-    ListUsersUseCaseResponse, LoginUserUseCaseRequest,
-    LoginUserUseCaseResponse, UpdateUserByIdUseCaseRequest,
+    ListUsersUseCaseResponse,
+    UpdateUserByIdUseCaseRequest,
     UpdteUserByIdUseCaseResponse
 }
 

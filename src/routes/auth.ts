@@ -1,8 +1,5 @@
 import { Router } from "express";
-import { CreateUserController, DeleteUserByIdController, ListUserByIdController, ListUsersController, LoginUserController, UpdateUserByIdController } from "../controller/user";
-import { authorizeAccessForRole } from "../middlewares/authRole";
-import { tokenUtils } from "../utils/authToken";
-const { checkAuthenticatedToken } = tokenUtils()
+import { AuthController } from "../controller/auth";
 
 class RouterAuthUser {
     private router: Router
@@ -10,7 +7,7 @@ class RouterAuthUser {
     constructor() {
         this.router = Router()
 
-        this.router.post('/loginUser', new LoginUserController().loginUser)
+        this.router.post('/authUser', new AuthController().AuthUser)
     }
 
     getRouter(): Router {

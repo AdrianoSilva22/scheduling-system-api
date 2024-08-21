@@ -1,5 +1,5 @@
-import { CreateUserUseCaseRequest, ListUserByIdUseCaseRequest, LoginUserUseCaseRequest } from "../useCase/ucio/user";
-import { CreateUserUseCaseValidateInterface, ListUserByIdUseCaseValidateInterface, LoginUserUseCaseValidateInterface } from "../useCase/validate/user";
+import { CreateUserUseCaseRequest, ListUserByIdUseCaseRequest } from "../useCase/ucio/user";
+import { CreateUserUseCaseValidateInterface, ListUserByIdUseCaseValidateInterface } from "../useCase/validate/user";
 import { checkStringEmpty, checkUuid } from "./validate";
 
 class CreateUserUseCaseValidate implements CreateUserUseCaseValidateInterface {
@@ -23,19 +23,8 @@ class ListUserByIdUseCaseValidate implements ListUserByIdUseCaseValidateInterfac
     }
 }
 
-class LoginUserUseCaseValidate implements LoginUserUseCaseValidateInterface {
-    validateLoginUser(req: LoginUserUseCaseRequest): string | null {
-        const { email, password } = req
-        if (checkStringEmpty(email)) return 'O email não pode ficar vazio!'
-        if (checkStringEmpty(password)) return 'A senha não pode ficar vazia!'
-
-        return null
-    }
-}
-
 export {
     CreateUserUseCaseValidate,
     ListUserByIdUseCaseValidate,
-    LoginUserUseCaseValidate
 };
 

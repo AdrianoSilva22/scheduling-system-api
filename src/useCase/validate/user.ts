@@ -5,13 +5,9 @@ interface CreateUserUseCaseValidateInterface {
 interface ListUserByIdUseCaseValidateInterface {
   validateUserById(req: ListUserByIdUseCaseRequest): string | null
 }
-interface LoginUserUseCaseValidateInterface {
-  validateLoginUser(req: LoginUserUseCaseRequest): string | null
-}
 
 export {
   CreateUserUseCaseValidateInterface,
-  ListUserByIdUseCaseValidateInterface,
-  LoginUserUseCaseValidateInterface
+  ListUserByIdUseCaseValidateInterface
 }
 

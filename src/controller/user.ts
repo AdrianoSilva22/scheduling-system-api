@@ -1,8 +1,8 @@
 import { Request, Response } from "express"
-import { CreateUserUserCaseRepository, DeleteUserByIdUseCaseRepository, ListUserByIdUseCaseRepository, ListUsersUseCaseRepository, LoginUserUseCaseRepository, UpdateUserByIdUseCaseRepository } from "../repository/user"
-import { CreateUserUseCaseRequest, LoginUserUseCaseRequest } from "../useCase/ucio/user"
-import { CreateUserUseCase, DeleteUserByIdUseCase, ListUserByIdUseCase, ListUsersUseCase, LoginUserUseCase, UpdateUserByIdUseCase } from "../useCase/user"
-import { CreateUserUseCaseValidate, ListUserByIdUseCaseValidate, LoginUserUseCaseValidate } from "../validate/user"
+import { CreateUserUserCaseRepository, DeleteUserByIdUseCaseRepository, ListUserByIdUseCaseRepository, ListUsersUseCaseRepository, UpdateUserByIdUseCaseRepository } from "../repository/user"
+import { CreateUserUseCaseRequest } from "../useCase/ucio/user"
+import { CreateUserUseCase, DeleteUserByIdUseCase, ListUserByIdUseCase, ListUsersUseCase, UpdateUserByIdUseCase } from "../useCase/user"
+import { CreateUserUseCaseValidate, ListUserByIdUseCaseValidate } from "../validate/user"
 class CreateUserController {
     async createUser(req: Request, res: Response) {
         try {
@@ -91,32 +91,8 @@ class DeleteUserByIdController {
     }
 }
 
-class LoginUserController {
-    async loginUser(req: Request, res: Response) {
-        try {
-            const { email, password } = req.body
-
-            const ucReq = new LoginUserUseCaseRequest(email, password)
-
-            const repository = new LoginUserUseCaseRepository
-            const validate = new LoginUserUseCaseValidate
-            const useCase = new LoginUserUseCase(repository, validate)
-
-            const user = (await useCase.loginUser(ucReq))
-            if (user.error) {
-                res.status(200).json({ message: user.error })
-            } else if (user.userTokenJwt) {
-                res.status(200).json({ message: 'Login realizado com sucesso!', token: user.userTokenJwt });
-            }
-        } catch (error) {
-            console.error("ERRO INTERNO AO LOGAR:", error)
-            res.status(500).json({ error: "Erro ao processar a requisição" })
-        }
-    }
-}
-
 export {
     CreateUserController, DeleteUserByIdController, ListUserByIdController,
-    ListUsersController, LoginUserController, UpdateUserByIdController
+    ListUsersController, UpdateUserByIdController
 }
 
