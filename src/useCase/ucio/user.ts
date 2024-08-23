@@ -73,7 +73,7 @@ class UpdateUserByIdUseCaseRequest {
 
 }
 
-class UpdteUserByIdUseCaseResponse {
+class UpdateUserByIdUseCaseResponse {
     user?: UserEntity
     error?: string
 
@@ -109,6 +109,6 @@ export {
     ListUserByIdUseCaseResponse,
     ListUsersUseCaseResponse,
     UpdateUserByIdUseCaseRequest,
-    UpdteUserByIdUseCaseResponse
+    UpdateUserByIdUseCaseResponse
 }
 

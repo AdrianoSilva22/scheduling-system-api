@@ -1,4 +1,4 @@
-import { CreateUserUseCaseRequest, ListUserByIdUseCaseRequest, LoginUserUseCaseRequest } from "../ucio/user"
+import { CreateUserUseCaseRequest, ListUserByIdUseCaseRequest } from "../ucio/user"
 interface CreateUserUseCaseValidateInterface {
   validateUser(req: CreateUserUseCaseRequest): string | null
 }

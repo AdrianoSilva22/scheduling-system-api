@@ -2,8 +2,8 @@ import { compare } from "bcryptjs"
 import { UserEntity } from "../entity/user"
 import { passwordHash } from "../utils/passwordHashUtils"
 import { generateUUID } from "../utils/uuid"
-import { CreateUserUseCaseRepositoryInterface, DeleteUsersByIdUseCaseRepositoryInterface, ListUsersByIdUseCaseRepositoryInterface, ListUsersUseCaseRepositoryInterface, UpdateUsersByIdUseCaseRepositoryInterface } from "./repository/user"
-import { CreateUserUseCaseRequest, CreateUserUseCaseResponse, DeleteUserByIdUseCaseResponse, ListUserByIdUseCaseRequest, ListUserByIdUseCaseResponse, ListUsersUseCaseResponse, UpdateUserByIdUseCaseRequest, UpdteUserByIdUseCaseResponse } from "./ucio/user"
+import { CreateUserUseCaseRepositoryInterface, DeleteUserByIdUseCaseRepositoryInterface, ListUserByIdUseCaseRepositoryInterface, ListUsersUseCaseRepositoryInterface, UpdateUserByIdUseCaseRepositoryInterface } from "./repository/user"
+import { CreateUserUseCaseRequest, CreateUserUseCaseResponse, DeleteUserByIdUseCaseResponse, ListUserByIdUseCaseRequest, ListUserByIdUseCaseResponse, ListUsersUseCaseResponse, UpdateUserByIdUseCaseRequest, UpdateUserByIdUseCaseResponse } from "./ucio/user"
 import { CreateUserUseCaseValidateInterface, ListUserByIdUseCaseValidateInterface } from "./validate/user"
 
 class CreateUserUseCase {
@@ -74,10 +74,10 @@ class ListUsersUseCase {
     }
 }
 class ListUserByIdUseCase {
-    repository: ListUsersByIdUseCaseRepositoryInterface
+    repository: ListUserByIdUseCaseRepositoryInterface
     validate: ListUserByIdUseCaseValidateInterface
 
-    constructor(repository: ListUsersByIdUseCaseRepositoryInterface, validate: ListUserByIdUseCaseValidateInterface) {
+    constructor(repository: ListUserByIdUseCaseRepositoryInterface, validate: ListUserByIdUseCaseValidateInterface) {
         this.repository = repository
         this.validate = validate
     }
@@ -103,13 +103,13 @@ class ListUserByIdUseCase {
     }
 }
 class UpdateUserByIdUseCase {
-    repository: UpdateUsersByIdUseCaseRepositoryInterface
+    repository: UpdateUserByIdUseCaseRepositoryInterface
 
-    constructor(repository: UpdateUsersByIdUseCaseRepositoryInterface) {
+    constructor(repository: UpdateUserByIdUseCaseRepositoryInterface) {
         this.repository = repository
     }
 
-    async UpdateUserById(req: UpdateUserByIdUseCaseRequest): Promise<UpdteUserByIdUseCaseResponse> {
+    async UpdateUserById(req: UpdateUserByIdUseCaseRequest): Promise<UpdateUserByIdUseCaseResponse> {
         try {
             const { password } = req
 
@@ -120,18 +120,18 @@ class UpdateUserByIdUseCase {
 
             const user = await this.repository.updateUserById(req)
 
-            return new UpdteUserByIdUseCaseResponse(user)
+            return new UpdateUserByIdUseCaseResponse(user)
 
         } catch (error: any) {
             console.log('INTERNAL_SERVER_ERROR', error)
-            return new UpdteUserByIdUseCaseResponse(error)
+            return new UpdateUserByIdUseCaseResponse(error)
         }
     }
 }
 class DeleteUserByIdUseCase {
-    repository: DeleteUsersByIdUseCaseRepositoryInterface
+    repository: DeleteUserByIdUseCaseRepositoryInterface
 
-    constructor(repository: DeleteUsersByIdUseCaseRepositoryInterface) {
+    constructor(repository: DeleteUserByIdUseCaseRepositoryInterface) {
         this.repository = repository
     }
 

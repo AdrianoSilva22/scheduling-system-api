@@ -7,18 +7,18 @@ interface CreateUserUseCaseRepositoryInterface {
 interface ListUsersUseCaseRepositoryInterface {
     listUsers(): Promise<UserEntity[]>
 }
-interface ListUsersByIdUseCaseRepositoryInterface {
+interface ListUserByIdUseCaseRepositoryInterface {
     listUserById(ID: ListUserByIdUseCaseRequest): Promise<UserEntity>
 }
-interface UpdateUsersByIdUseCaseRepositoryInterface {
+interface UpdateUserByIdUseCaseRepositoryInterface {
     updateUserById(ID: UpdateUserByIdUseCaseRequest): Promise<UserEntity>
 }
-interface DeleteUsersByIdUseCaseRepositoryInterface {
+interface DeleteUserByIdUseCaseRepositoryInterface {
     deleteUserById(ID: string): Promise<void>
 }
 
 export {
-    CreateUserUseCaseRepositoryInterface, DeleteUsersByIdUseCaseRepositoryInterface, ListUsersByIdUseCaseRepositoryInterface,
-    ListUsersUseCaseRepositoryInterface, UpdateUsersByIdUseCaseRepositoryInterface
+    CreateUserUseCaseRepositoryInterface, DeleteUserByIdUseCaseRepositoryInterface, ListUserByIdUseCaseRepositoryInterface,
+    ListUsersUseCaseRepositoryInterface, UpdateUserByIdUseCaseRepositoryInterface
 }
 

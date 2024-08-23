@@ -1,5 +1,7 @@
 import { CreateAvailableScheduleUseCaseRequest } from "../useCase/ucio/availableSchedule";
-import { CreateAvailableScheduleUseCaseValidateInterface } from "../useCase/validate/availableSchedule";
+import { ListSchedulingByIdUseCaseRequest } from "../useCase/ucio/scheduling";
+import { CreateAvailableScheduleUseCaseValidateInterface, ListAvailableScheduleByIdUseCaseValidateInterface } from "../useCase/validate/availableSchedule";
+import { ListSchedulingByIdUseCaseValidateInterface } from "../useCase/validate/scheduling";
 import { checkDateEmpty, checkEmpty } from "./validate";
 
 class CreateAvailableScheduleUseCaseValidate implements CreateAvailableScheduleUseCaseValidateInterface {
@@ -12,6 +14,16 @@ class CreateAvailableScheduleUseCaseValidate implements CreateAvailableScheduleU
     }
 }
 
+class ListAvailableScheduleByIdUseCaseValidate implements ListAvailableScheduleByIdUseCaseValidateInterface {
+    validateAvailableScheduleById(req: ListSchedulingByIdUseCaseRequest): string | null {
+
+        if (checkEmpty(req)) return "O Id é necessário"
+
+        return null
+    }
+}
+
 export {
-    CreateAvailableScheduleUseCaseValidate
+    CreateAvailableScheduleUseCaseValidate,
+    ListAvailableScheduleByIdUseCaseValidate
 }

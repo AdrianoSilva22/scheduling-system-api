@@ -1,6 +1,6 @@
 import { CreateUserUseCaseRequest, ListUserByIdUseCaseRequest } from "../useCase/ucio/user";
 import { CreateUserUseCaseValidateInterface, ListUserByIdUseCaseValidateInterface } from "../useCase/validate/user";
-import { checkStringEmpty, checkUuid } from "./validate";
+import { checkEmpty, checkStringEmpty, checkUuid } from "./validate";
 
 class CreateUserUseCaseValidate implements CreateUserUseCaseValidateInterface {
     validateUser(req: CreateUserUseCaseRequest): string | null {
@@ -17,7 +17,7 @@ class CreateUserUseCaseValidate implements CreateUserUseCaseValidateInterface {
 class ListUserByIdUseCaseValidate implements ListUserByIdUseCaseValidateInterface {
     validateUserById(req: ListUserByIdUseCaseRequest): string | null {
 
-        if (!checkUuid(req)) return "O Id é necessário e no formato uuid"
+        if (checkEmpty(req)) return "O Id é necessário"
 
         return null
     }

@@ -1,8 +1,8 @@
 import { SchedulingEntity } from "../entity/scheduling";
 import { generateUUID } from "../utils/uuid";
-import { CreateScheduleUseCaseRepositoryInterface } from "./repository/scheduling";
-import { CreateSchedulingUseCaseRequest, CreateSchedulingUseCaseResponse } from "./ucio/scheduling";
-import { CreateSchedulingUseCaseValidateInterface } from "./validate/scheduling";
+import { CreateScheduleUseCaseRepositoryInterface, DeleteSchedulingByIdUseCaseRepositoryInterface, ListSchedulingByIdUseCaseRepositoryInterface, ListSchedulingsUseCaseRepositoryInterface, UpdateSchedulingByIdUseCaseRepositoryInterface } from "./repository/scheduling";
+import { CreateSchedulingUseCaseRequest, CreateSchedulingUseCaseResponse, DeleteSchedulingByIdUseCaseResponse, ListSchedulingByIdUseCaseRequest, ListSchedulingByIdUseCaseResponse, ListSchedulingsUseCaseResponse, UpdateSchedulingByIdUseCaseRequest, UpdateSchedulingByIdUseCaseResponse } from "./ucio/scheduling";
+import { CreateSchedulingUseCaseValidateInterface, ListSchedulingByIdUseCaseValidateInterface } from "./validate/scheduling";
 
 class CreateSchedulingUseCase {
     repository: CreateScheduleUseCaseRepositoryInterface
@@ -15,12 +15,9 @@ class CreateSchedulingUseCase {
 
     async createScheduling(req: CreateSchedulingUseCaseRequest): Promise<CreateSchedulingUseCaseResponse> {
         try {
-           
-
-            const {client, horarioId } = req
+            const { client, horarioId } = req
             const UUID = generateUUID()
             const now = new Date()
-
 
             this.repository.createScheduling(new SchedulingEntity(UUID, client, horarioId, now, now))
 
@@ -30,9 +27,98 @@ class CreateSchedulingUseCase {
             return new CreateSchedulingUseCaseResponse(error)
         }
     }
+}
 
+class ListSchedulingsUseCase {
+    repository: ListSchedulingsUseCaseRepositoryInterface
+
+    constructor(repository: ListSchedulingsUseCaseRepositoryInterface) {
+        this.repository = repository
+    }
+
+    async listSchedulings(): Promise<ListSchedulingsUseCaseResponse> {
+        try {
+            const schedulings = await this.repository.listSchedulings()
+
+            return new ListSchedulingsUseCaseResponse(schedulings)
+        } catch (error: any) {
+            console.log('INTERNAL_SERVER_ERROR', error)
+
+            return new ListSchedulingsUseCaseResponse(error)
+        }
+    }
+}
+class ListSchedulingByIdUseCase {
+    repository: ListSchedulingByIdUseCaseRepositoryInterface
+    validate: ListSchedulingByIdUseCaseValidateInterface
+
+    constructor(repository: ListSchedulingByIdUseCaseRepositoryInterface, validate: ListSchedulingByIdUseCaseValidateInterface) {
+        this.repository = repository
+        this.validate = validate
+    }
+
+    async listSchedulingById(req: ListSchedulingByIdUseCaseRequest): Promise<ListSchedulingByIdUseCaseResponse> {
+        try {
+            const errorMessage = await this.validate.validateSchedulingById(req)
+
+            if (errorMessage) {
+                console.log('PRE_CONDITIONAL_ERROR', errorMessage)
+                return new ListSchedulingByIdUseCaseResponse(errorMessage)
+            }
+
+            const scheduling = await this.repository.listSchedulingById(req)
+
+            return new ListSchedulingByIdUseCaseResponse(scheduling)
+
+        } catch (error: any) {
+            console.log('INTERNAL_SERVER_ERROR', error)
+            return new ListSchedulingByIdUseCaseResponse(error)
+        }
+    }
+}
+class UpdateSchedulingByIdUseCase {
+    repository: UpdateSchedulingByIdUseCaseRepositoryInterface
+
+    constructor(repository: UpdateSchedulingByIdUseCaseRepositoryInterface) {
+        this.repository = repository
+    }
+
+    async UpdateSchedulingById(req: UpdateSchedulingByIdUseCaseRequest): Promise<UpdateSchedulingByIdUseCaseResponse> {
+        try {
+            const scheduling = await this.repository.updateSchedulingById(req)
+
+            return new UpdateSchedulingByIdUseCaseResponse(scheduling)
+
+        } catch (error: any) {
+            console.log('INTERNAL_SERVER_ERROR', error)
+            return new UpdateSchedulingByIdUseCaseResponse(error)
+        }
+    }
+}
+class DeleteSchedulingByIdUseCase {
+    repository: DeleteSchedulingByIdUseCaseRepositoryInterface
+
+    constructor(repository: DeleteSchedulingByIdUseCaseRepositoryInterface) {
+        this.repository = repository
+    }
+
+    async deleteSchedulingById(req: ListSchedulingByIdUseCaseRequest): Promise<DeleteSchedulingByIdUseCaseResponse> {
+        try {
+            const { ID } = req
+            await this.repository.deleteSchedulingById(ID)
+
+            return new DeleteSchedulingByIdUseCaseResponse(null)
+        } catch (error: any) {
+            console.log('INTERNAL_SERVER_ERROR', error)
+            return new DeleteSchedulingByIdUseCaseResponse(error)
+        }
+    }
 }
 
 export {
-    CreateSchedulingUseCase
+    CreateSchedulingUseCase,
+    DeleteSchedulingByIdUseCase,
+    ListSchedulingByIdUseCase,
+    ListSchedulingsUseCase,
+    UpdateSchedulingByIdUseCase
 }
