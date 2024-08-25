@@ -1,8 +1,9 @@
 import { AvailableScheduleEntity } from "../entity/availableSchedule";
 import { generateUUID } from "../utils/uuid";
+import { DeleteAvailableScheduleByIdUseCaseValidate } from "../validate/availableSchedule";
 import { CreateAvailableScheduleUseCaseRepositoryInterface, DeleteAvailableScheduleByIdUseCaseRepositoryInterface, ListAvailableScheduleByIdUseCaseRepositoryInterface, ListAvailableSchedulesUseCaseRepositoryInterface, UpdateAvailableScheduleByIdUseCaseRepositoryInterface } from "./repository/availableSchedule";
 import { CreateAvailableScheduleUseCaseRequest, CreateAvailableScheduleUseCaseResponse, DeleteAvailableScheduleByIdUseCaseResponse, ListAvailableScheduleByIdUseCaseRequest, ListAvailableScheduleByIdUseCaseResponse, ListAvailableSchedulesUseCaseResponse, UpdateAvailableScheduleByIdUseCaseRequest, UpdateAvailableScheduleByIdUseCaseResponse } from "./ucio/availableSchedule";
-import { CreateAvailableScheduleUseCaseValidateInterface, ListAvailableScheduleByIdUseCaseValidateInterface } from "./validate/availableSchedule";
+import { CreateAvailableScheduleUseCaseValidateInterface, ListAvailableScheduleByIdUseCaseValidateInterface, UpdateAvailableScheduleByIdUseCaseValidateInterface } from "./validate/availableSchedule";
 
 class CreateAvailableScheduleUseCase {
     repository: CreateAvailableScheduleUseCaseRepositoryInterface
@@ -16,7 +17,8 @@ class CreateAvailableScheduleUseCase {
     async createAvailableScheduling(req: CreateAvailableScheduleUseCaseRequest): Promise<CreateAvailableScheduleUseCaseResponse> {
         try {
             const errorMessage = this.validate.validateAvailableSchedule(req)
-
+            console.log(errorMessage);
+            
             if (errorMessage) {
                 console.log('PRE_CONDITIONAL_ERROR', errorMessage)
                 return new CreateAvailableScheduleUseCaseResponse(errorMessage)
@@ -27,7 +29,7 @@ class CreateAvailableScheduleUseCase {
             const now = new Date()
 
             this.repository.createAvailableSchedule(new AvailableScheduleEntity(UUID, dateTime, professional, now, now))
-
+            
             return new CreateAvailableScheduleUseCaseResponse(null)
         } catch (error: any) {
             console.log('PRE_CONDITIONAL_ERROR', error)
@@ -70,7 +72,6 @@ class ListAvailableScheduleByIdUseCase {
         try {
             const errorMessage = await this.validate.validateAvailableScheduleById(req)
 
-
             if (errorMessage) {
                 console.log('PRE_CONDITIONAL_ERROR', errorMessage)
                 return new ListAvailableScheduleByIdUseCaseResponse(errorMessage)
@@ -88,13 +89,22 @@ class ListAvailableScheduleByIdUseCase {
 }
 class UpdateAvailableScheduleByIdUseCase {
     repository: UpdateAvailableScheduleByIdUseCaseRepositoryInterface
+    validate: UpdateAvailableScheduleByIdUseCaseValidateInterface
 
-    constructor(repository: UpdateAvailableScheduleByIdUseCaseRepositoryInterface) {
+    constructor(repository: UpdateAvailableScheduleByIdUseCaseRepositoryInterface, validate: UpdateAvailableScheduleByIdUseCaseValidateInterface) {
         this.repository = repository
+        this.validate = validate
     }
 
     async UpdateAvailableScheduleById(req: UpdateAvailableScheduleByIdUseCaseRequest): Promise<UpdateAvailableScheduleByIdUseCaseResponse> {
         try {
+            const errorMessage = await this.validate.validateAvailableScheduleById(req)
+
+            if (errorMessage) {
+                console.log('PRE_CONDITIONAL_ERROR', errorMessage)
+                return new UpdateAvailableScheduleByIdUseCaseResponse(errorMessage)
+            }
+
             const availableschedule = await this.repository.updateAvailableScheduleById(req)
 
             return new UpdateAvailableScheduleByIdUseCaseResponse(availableschedule)
@@ -107,13 +117,22 @@ class UpdateAvailableScheduleByIdUseCase {
 }
 class DeleteAvailableScheduleByIdUseCase {
     repository: DeleteAvailableScheduleByIdUseCaseRepositoryInterface
+    validate: DeleteAvailableScheduleByIdUseCaseValidate
 
-    constructor(repository: DeleteAvailableScheduleByIdUseCaseRepositoryInterface) {
+    constructor(repository: DeleteAvailableScheduleByIdUseCaseRepositoryInterface, validate: DeleteAvailableScheduleByIdUseCaseValidate) {
         this.repository = repository
+        this.validate = validate
     }
 
     async deleteAvailableScheduleById(req: ListAvailableScheduleByIdUseCaseRequest): Promise<DeleteAvailableScheduleByIdUseCaseResponse> {
         try {
+            const errorMessage = await this.validate.validateAvailableScheduleById(req)
+
+
+            if (errorMessage) {
+                console.log('PRE_CONDITIONAL_ERROR', errorMessage)
+                return new DeleteAvailableScheduleByIdUseCaseResponse(errorMessage)
+            }
             const { ID } = req
             const availableschedule = await this.repository.deleteAvailableScheduleById(ID)
 

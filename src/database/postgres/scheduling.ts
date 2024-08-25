@@ -15,7 +15,9 @@ async function createScheduling(schedulingEntity: SchedulingEntity): Promise<voi
 async function listSchedulings(): Promise<SchedulingEntity[]> {
     const repository = await Connection.getRepository(SchedulingModel)
 
-    const schedulings = await repository.find()
+    const schedulings = await repository.find({
+        relations: ['client', 'horario']
+    })
 
     const schedulingsEntities = schedulings.map((schedulingModel) => toSchedulingEntity(schedulingModel))
 

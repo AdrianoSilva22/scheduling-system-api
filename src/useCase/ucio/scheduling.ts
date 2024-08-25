@@ -4,11 +4,11 @@ import { UserEntity } from "../../entity/user"
 
 class CreateSchedulingUseCaseRequest {
     client: UserEntity
-    horarioId: AvailableScheduleEntity
+    horario: AvailableScheduleEntity
 
     constructor(client: UserEntity, horarioId: AvailableScheduleEntity) {
         this.client = client
-        this.horarioId = horarioId
+        this.horario = horarioId
     }
 }
 
@@ -54,12 +54,12 @@ class ListSchedulingByIdUseCaseResponse {
 class UpdateSchedulingByIdUseCaseRequest {
     ID: string
     client?: UserEntity
-    horarioId?: AvailableScheduleEntity
+    horario?: AvailableScheduleEntity
 
-    constructor(ID: string, client?: UserEntity, horarioId?: AvailableScheduleEntity) {
+    constructor(ID: string, client?: UserEntity, horario?: AvailableScheduleEntity) {
         this.ID = ID
         this.client = client
-        this.horarioId = horarioId
+        this.horario = horario
     }
 }
 

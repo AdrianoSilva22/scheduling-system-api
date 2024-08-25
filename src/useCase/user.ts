@@ -1,10 +1,9 @@
-import { compare } from "bcryptjs"
 import { UserEntity } from "../entity/user"
 import { passwordHash } from "../utils/passwordHashUtils"
 import { generateUUID } from "../utils/uuid"
 import { CreateUserUseCaseRepositoryInterface, DeleteUserByIdUseCaseRepositoryInterface, ListUserByIdUseCaseRepositoryInterface, ListUsersUseCaseRepositoryInterface, UpdateUserByIdUseCaseRepositoryInterface } from "./repository/user"
-import { CreateUserUseCaseRequest, CreateUserUseCaseResponse, DeleteUserByIdUseCaseResponse, ListUserByIdUseCaseRequest, ListUserByIdUseCaseResponse, ListUsersUseCaseResponse, UpdateUserByIdUseCaseRequest, UpdateUserByIdUseCaseResponse } from "./ucio/user"
-import { CreateUserUseCaseValidateInterface, ListUserByIdUseCaseValidateInterface } from "./validate/user"
+import { CreateUserUseCaseRequest, CreateUserUseCaseResponse, DeleteUserByIdUseCaseRequest, DeleteUserByIdUseCaseResponse, ListUserByIdUseCaseRequest, ListUserByIdUseCaseResponse, ListUsersUseCaseResponse, UpdateUserByIdUseCaseRequest, UpdateUserByIdUseCaseResponse } from "./ucio/user"
+import { CreateUserUseCaseValidateInterface, DeleteUserByIdUseCaseValidateInterface, ListUserByIdUseCaseValidateInterface, UpdateUserByIdUseCaseValidateInterface } from "./validate/user"
 
 class CreateUserUseCase {
     validate: CreateUserUseCaseValidateInterface
@@ -20,7 +19,6 @@ class CreateUserUseCase {
             const errorMessage = this.validate.validateUser(req)
 
             if (errorMessage) {
-                console.log('PRE_CONDITIONAL_ERROR', errorMessage)
                 return new CreateUserUseCaseResponse(errorMessage)
             }
 
@@ -86,7 +84,6 @@ class ListUserByIdUseCase {
         try {
             const errorMessage = await this.validate.validateUserById(req)
 
-
             if (errorMessage) {
                 console.log('PRE_CONDITIONAL_ERROR', errorMessage)
                 return new ListUserByIdUseCaseResponse(errorMessage)
@@ -104,13 +101,21 @@ class ListUserByIdUseCase {
 }
 class UpdateUserByIdUseCase {
     repository: UpdateUserByIdUseCaseRepositoryInterface
-
-    constructor(repository: UpdateUserByIdUseCaseRepositoryInterface) {
+    validate: UpdateUserByIdUseCaseValidateInterface
+    constructor(repository: UpdateUserByIdUseCaseRepositoryInterface, validate: UpdateUserByIdUseCaseValidateInterface) {
         this.repository = repository
+        this.validate = validate
     }
 
     async UpdateUserById(req: UpdateUserByIdUseCaseRequest): Promise<UpdateUserByIdUseCaseResponse> {
         try {
+            const errorMessage = await this.validate.validateUserById(req)
+
+            if (errorMessage) {
+                console.log('PRE_CONDITIONAL_ERROR', errorMessage)
+                return new UpdateUserByIdUseCaseResponse(errorMessage)
+            }
+
             const { password } = req
 
             if (password) {
@@ -130,13 +135,21 @@ class UpdateUserByIdUseCase {
 }
 class DeleteUserByIdUseCase {
     repository: DeleteUserByIdUseCaseRepositoryInterface
+    validate: DeleteUserByIdUseCaseValidateInterface
 
-    constructor(repository: DeleteUserByIdUseCaseRepositoryInterface) {
+    constructor(repository: DeleteUserByIdUseCaseRepositoryInterface, validate: DeleteUserByIdUseCaseValidateInterface) {
         this.repository = repository
+        this.validate = validate
     }
 
-    async deleteUserById(req: ListUserByIdUseCaseRequest): Promise<DeleteUserByIdUseCaseResponse> {
+    async deleteUserById(req: DeleteUserByIdUseCaseRequest): Promise<DeleteUserByIdUseCaseResponse> {
         try {
+            const errorMessage = await this.validate.validateUserById(req)
+
+            if (errorMessage) {
+                console.log('PRE_CONDITIONAL_ERROR', errorMessage)
+                return new DeleteUserByIdUseCaseResponse(errorMessage)
+            }
             const { ID } = req
             const user = await this.repository.deleteUserById(ID)
 

@@ -2,7 +2,7 @@ import { SchedulingEntity } from "../entity/scheduling";
 import { generateUUID } from "../utils/uuid";
 import { CreateScheduleUseCaseRepositoryInterface, DeleteSchedulingByIdUseCaseRepositoryInterface, ListSchedulingByIdUseCaseRepositoryInterface, ListSchedulingsUseCaseRepositoryInterface, UpdateSchedulingByIdUseCaseRepositoryInterface } from "./repository/scheduling";
 import { CreateSchedulingUseCaseRequest, CreateSchedulingUseCaseResponse, DeleteSchedulingByIdUseCaseResponse, ListSchedulingByIdUseCaseRequest, ListSchedulingByIdUseCaseResponse, ListSchedulingsUseCaseResponse, UpdateSchedulingByIdUseCaseRequest, UpdateSchedulingByIdUseCaseResponse } from "./ucio/scheduling";
-import { CreateSchedulingUseCaseValidateInterface, ListSchedulingByIdUseCaseValidateInterface } from "./validate/scheduling";
+import { CreateSchedulingUseCaseValidateInterface, DeleteSchedulingByIdUseCaseValidateInterface, ListSchedulingByIdUseCaseValidateInterface, UpdateSchedulingByIdUseCaseValidateInterface } from "./validate/scheduling";
 
 class CreateSchedulingUseCase {
     repository: CreateScheduleUseCaseRepositoryInterface
@@ -15,11 +15,18 @@ class CreateSchedulingUseCase {
 
     async createScheduling(req: CreateSchedulingUseCaseRequest): Promise<CreateSchedulingUseCaseResponse> {
         try {
-            const { client, horarioId } = req
+            const errorMessage = await this.validate.validateScheduling(req)
+
+            if (errorMessage) {
+                console.log('PRE_CONDITIONAL_ERROR', errorMessage)
+                return new CreateSchedulingUseCaseResponse(errorMessage)
+            }
+
+            const { client, horario } = req
             const UUID = generateUUID()
             const now = new Date()
 
-            this.repository.createScheduling(new SchedulingEntity(UUID, client, horarioId, now, now))
+            this.repository.createScheduling(new SchedulingEntity(UUID, client, horario, now, now))
 
             return new CreateSchedulingUseCaseResponse(null)
         } catch (error: any) {
@@ -78,13 +85,21 @@ class ListSchedulingByIdUseCase {
 }
 class UpdateSchedulingByIdUseCase {
     repository: UpdateSchedulingByIdUseCaseRepositoryInterface
-
-    constructor(repository: UpdateSchedulingByIdUseCaseRepositoryInterface) {
+    validate: UpdateSchedulingByIdUseCaseValidateInterface
+    constructor(repository: UpdateSchedulingByIdUseCaseRepositoryInterface, validate: UpdateSchedulingByIdUseCaseValidateInterface) {
         this.repository = repository
+        this.validate = validate
     }
 
     async UpdateSchedulingById(req: UpdateSchedulingByIdUseCaseRequest): Promise<UpdateSchedulingByIdUseCaseResponse> {
         try {
+            const errorMessage = await this.validate.validateSchedulingById(req)
+
+            if (errorMessage) {
+                console.log('PRE_CONDITIONAL_ERROR', errorMessage)
+                return new UpdateSchedulingByIdUseCaseResponse(errorMessage)
+            }
+
             const scheduling = await this.repository.updateSchedulingById(req)
 
             return new UpdateSchedulingByIdUseCaseResponse(scheduling)
@@ -97,13 +112,21 @@ class UpdateSchedulingByIdUseCase {
 }
 class DeleteSchedulingByIdUseCase {
     repository: DeleteSchedulingByIdUseCaseRepositoryInterface
-
-    constructor(repository: DeleteSchedulingByIdUseCaseRepositoryInterface) {
+    validate: DeleteSchedulingByIdUseCaseValidateInterface
+    constructor(repository: DeleteSchedulingByIdUseCaseRepositoryInterface, validate: DeleteSchedulingByIdUseCaseValidateInterface) {
         this.repository = repository
+        this.validate = validate
     }
 
     async deleteSchedulingById(req: ListSchedulingByIdUseCaseRequest): Promise<DeleteSchedulingByIdUseCaseResponse> {
         try {
+            const errorMessage = await this.validate.validateSchedulingById(req)
+
+            if (errorMessage) {
+                console.log('PRE_CONDITIONAL_ERROR', errorMessage)
+                return new DeleteSchedulingByIdUseCaseResponse(errorMessage)
+            }
+
             const { ID } = req
             await this.repository.deleteSchedulingById(ID)
 

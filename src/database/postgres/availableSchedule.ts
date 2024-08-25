@@ -14,7 +14,9 @@ async function createAvailableSchedule(availableScheduleEntity: AvailableSchedul
 async function listAvailableSchedules(): Promise<AvailableScheduleEntity[]> {
     const repository = await Connection.getRepository(AvailableScheduleModel)
 
-    const availableSchedules = await repository.find()
+    const availableSchedules = await repository.find({
+        relations: ['professional']
+    })
 
     const availableSchedulesEntities = availableSchedules.map((availableSchedules) => toAvailableScheduleEntity(availableSchedules))
 
@@ -39,7 +41,7 @@ async function updateAvailableScheduleById(req: UpdateAvailableScheduleByIdUseCa
     await repository.update(ID, availableScheduleProps)
 
     const updatedAvailableScheduleModel = await repository.findOneBy({ ID });
-    
+
     const updatedAvailableScheduleEntity = toAvailableScheduleEntity(updatedAvailableScheduleModel)
 
     return updatedAvailableScheduleEntity
@@ -47,7 +49,7 @@ async function updateAvailableScheduleById(req: UpdateAvailableScheduleByIdUseCa
 
 async function deleteAvailableScheduleById(ID: string): Promise<void> {
     const repository = await Connection.getRepository(AvailableScheduleModel)
-
+    
     await repository.delete({ ID })
 }
 

@@ -6,8 +6,18 @@ interface ListUserByIdUseCaseValidateInterface {
   validateUserById(req: ListUserByIdUseCaseRequest): string | null
 }
 
+interface UpdateUserByIdUseCaseValidateInterface {
+  validateUserById(req: ListUserByIdUseCaseRequest): string | null
+}
+
+interface DeleteUserByIdUseCaseValidateInterface {
+  validateUserById(req: ListUserByIdUseCaseRequest): string | null
+}
+
 export {
   CreateUserUseCaseValidateInterface,
-  ListUserByIdUseCaseValidateInterface
+  ListUserByIdUseCaseValidateInterface,
+  UpdateUserByIdUseCaseValidateInterface,
+  DeleteUserByIdUseCaseValidateInterface
 }
 

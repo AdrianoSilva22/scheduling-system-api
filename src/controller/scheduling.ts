@@ -1,8 +1,9 @@
 import { Request, Response } from "express";
-import { CreateSchedulingUseCaseRequest } from "../useCase/ucio/scheduling";
+import { CreateSchedulingUseCaseRequest, DeleteSchedulingByIdUseCaseRequest, UpdateSchedulingByIdUseCaseRequest } from "../useCase/ucio/scheduling";
 import { CreateSchedulingUseCaseRepository, DeleteSchedulingByIdUseCaseRepository, ListSchedulingByIdUseCaseRepository, ListSchedulingsUseCaseRepository, UpdateSchedulingByIdUseCaseRepository } from "../repository/scheduling";
 import { CreateSchedulingUseCase, DeleteSchedulingByIdUseCase, ListSchedulingByIdUseCase, ListSchedulingsUseCase, UpdateSchedulingByIdUseCase } from "../useCase/scheduling";
-import { CreateSchedulingUseCaseValidate, ListSchedulingByIdUseCaseValidate } from "../validate/scheduling";
+import { CreateSchedulingUseCaseValidate, DeleteSchedulingByIdUseCaseValidate, ListSchedulingByIdUseCaseValidate, UpdatedSchedulingUseCaseValidate } from "../validate/scheduling";
+import { ListAvailableScheduleByIdUseCaseRequest } from "../useCase/ucio/availableSchedule";
 
 class CreateSchedulingController {
     async createScheduling(req: Request, res: Response) {
@@ -15,9 +16,13 @@ class CreateSchedulingController {
             const validate = new CreateSchedulingUseCaseValidate
             const useCase = new CreateSchedulingUseCase(repository, validate)
 
-            await useCase.createScheduling(ucReq)
-            
-            res.status(201).json({ message: "Agendamento criado com sucesso!" })
+            const resultCreateScheduling = await useCase.createScheduling(ucReq)
+
+            if (resultCreateScheduling.error) {
+                res.status(400).json({ message: resultCreateScheduling.error })
+            } else {
+                res.status(200).json({ message: "Agendamento criado com sucesso!" })
+            }
         } catch (error) {
             console.error("Erro ao criar agendamento:", error)
 
@@ -51,11 +56,11 @@ class ListSchedulingByIdController {
             const validate = new ListSchedulingByIdUseCaseValidate
             const useCase = new ListSchedulingByIdUseCase(repository, validate)
 
-            const scheduling = (await useCase.listSchedulingById(ID))
-            if (scheduling.scheduling) {
-                res.status(200).json({ scheduling: scheduling.scheduling, message: "Agendamento listado com sucesso" })
-            } else if (scheduling.error) {
-                res.status(200).json({ error: scheduling.error })
+            const resultListSchedulingById = (await useCase.listSchedulingById(ID))
+            if (resultListSchedulingById.error) {
+                res.status(400).json({ message: resultListSchedulingById.error })
+            } else {
+                res.status(200).json({ scheduling: resultListSchedulingById.scheduling, message: "Agendamento listado com sucesso" })
             }
         } catch (error) {
             console.error("Erro ao listar Agendamento:", error)
@@ -66,13 +71,21 @@ class ListSchedulingByIdController {
 class UpdateSchedulingByIdController {
     async UpdateSchedulingById(req: Request, res: Response) {
         try {
+            const { ID, client, horario } = req.body
+            const ucReq = new UpdateSchedulingByIdUseCaseRequest(ID, client, horario)
 
             const repository = new UpdateSchedulingByIdUseCaseRepository
-            const useCase = new UpdateSchedulingByIdUseCase(repository)
+            const validate = new UpdatedSchedulingUseCaseValidate
+            const useCase = new UpdateSchedulingByIdUseCase(repository, validate)
 
-            await useCase.UpdateSchedulingById(req.body)
+            const resultUpdateSchedulingById = await useCase.UpdateSchedulingById(ucReq)
 
-            res.status(200).json({ message: "Agendamento Atualizado com sucesso!" })
+            if (resultUpdateSchedulingById.error) {
+                res.status(400).json({ message: resultUpdateSchedulingById.error })
+            } else {
+                res.status(200).json({ message: "Agendamento atualizado com sucesso!" })
+            }
+
         } catch (error) {
             console.error("Erro ao atulizar Agendamento:", error)
             res.status(500).json({ error: "Erro ao processar a requisição" })
@@ -82,12 +95,20 @@ class UpdateSchedulingByIdController {
 class DeleteSchedulingByIdController {
     async deleteSchedulingById(req: Request, res: Response) {
         try {
+            const { ID } = req.body
+
             const repository = new DeleteSchedulingByIdUseCaseRepository
-            const useCase = new DeleteSchedulingByIdUseCase(repository)
+            const validate = new DeleteSchedulingByIdUseCaseValidate
+            const useCase = new DeleteSchedulingByIdUseCase(repository, validate)
 
-            await useCase.deleteSchedulingById(req.body)
+            const resultDeleteSchedulingById = await useCase.deleteSchedulingById(ID)
 
-            res.status(200).json({ message: "usuário deletado com sucesso!" })
+            if (resultDeleteSchedulingById.error) {
+                res.status(400).json({ message: resultDeleteSchedulingById.error })
+            } else {
+                res.status(200).json({ message: "Agendamento deletado com sucesso!" })
+            }
+
         } catch (error) {
             console.error("Erro ao deletar usuário:", error)
             res.status(500).json({ error: "Erro ao processar a requisição" })

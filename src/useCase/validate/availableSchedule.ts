@@ -6,9 +6,19 @@ interface CreateAvailableScheduleUseCaseValidateInterface {
 
 interface ListAvailableScheduleByIdUseCaseValidateInterface {
     validateAvailableScheduleById(req: ListAvailableScheduleByIdUseCaseRequest): string | null
-  }
+}
+
+interface UpdateAvailableScheduleByIdUseCaseValidateInterface {
+    validateAvailableScheduleById(req: ListAvailableScheduleByIdUseCaseRequest): string | null
+}
+
+interface deleteAvailableScheduleByIdUseCaseValidateInterface {
+    validateAvailableScheduleById(req: ListAvailableScheduleByIdUseCaseRequest): string | null
+}
 
 export {
     CreateAvailableScheduleUseCaseValidateInterface,
-    ListAvailableScheduleByIdUseCaseValidateInterface
+    ListAvailableScheduleByIdUseCaseValidateInterface,
+    UpdateAvailableScheduleByIdUseCaseValidateInterface,
+    deleteAvailableScheduleByIdUseCaseValidateInterface
 }

@@ -1,5 +1,3 @@
-import { ListUserByIdUseCaseRequest } from "../useCase/ucio/user"
-
 function checkNumberEmpty(e: number): boolean {
     return e === undefined || e === null || Number.isNaN(e)
 }
@@ -8,7 +6,7 @@ function checkStringEmpty(e: string): boolean {
     return e === undefined || e === null || e.trim() === ''
 }
 function checkEmpty(e: any): boolean {
-    return e ==! undefined || e ==! null || e ==! ''
+    return e === undefined || e === null || e === ''
 }
 
 function checkListEmpty(arr: Array<any>): boolean {
@@ -27,21 +25,27 @@ function checkRowEmptyFile(row: any): boolean {
     return row.length === 9 || row.undefined || row.null
 }
 
-function checkUuid( req: ListUserByIdUseCaseRequest) {
-    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-   
-    const idString = req as unknown as string;
-    return uuidRegex.test(idString);
+function checkEmail(email: any): boolean {
+    const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/
+
+    return !emailRegex.test(email)
 }
+function checkRole(role: 'manager' | 'professional' | 'client'): boolean {
+
+    return !['manager', 'professional', 'client'].includes(role)
+}
+
+
 
 export {
     checkBooleanEmpty,
-    checkDateEmpty,
     checkListEmpty,
     checkNumberEmpty,
     checkRowEmptyFile,
     checkStringEmpty,
-    checkUuid,
-    checkEmpty
+    checkEmpty,
+    checkEmail,
+    checkRole,
+    checkDateEmpty
 }
 

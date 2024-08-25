@@ -1,8 +1,8 @@
 import { Request, Response } from "express"
 import { CreateUserUserCaseRepository, DeleteUserByIdUseCaseRepository, ListUserByIdUseCaseRepository, ListUsersUseCaseRepository, UpdateUserByIdUseCaseRepository } from "../repository/user"
-import { CreateUserUseCaseRequest } from "../useCase/ucio/user"
+import { CreateUserUseCaseRequest, DeleteUserByIdUseCaseRequest, UpdateUserByIdUseCaseRequest } from "../useCase/ucio/user"
 import { CreateUserUseCase, DeleteUserByIdUseCase, ListUserByIdUseCase, ListUsersUseCase, UpdateUserByIdUseCase } from "../useCase/user"
-import { CreateUserUseCaseValidate, ListUserByIdUseCaseValidate } from "../validate/user"
+import { CreateUserUseCaseValidate, DeleteUserByIdUseCaseValidate, ListUserByIdUseCaseValidate, UpdateUserUseCaseValidate } from "../validate/user"
 class CreateUserController {
     async createUser(req: Request, res: Response) {
         try {
@@ -14,11 +14,15 @@ class CreateUserController {
             const repository = new CreateUserUserCaseRepository
             const useCase = new CreateUserUseCase(validate, repository)
 
-            await useCase.createUser(ucReq)
+            const resultCreateUser = await useCase.createUser(ucReq)
 
-            res.status(201).json({ message: "Usuário criado com sucesso" })
+            if (resultCreateUser.error) {
+                res.status(400).json({ message: resultCreateUser.error })
+            } else {
+                res.status(201).json({ message: "Usuário criado com sucesso" })
+            }
         } catch (error) {
-            console.error("Erro ao criar usuário:", error)
+            console.error("Erro ao criar usuário:")
             res.status(500).json({ error: "Erro ao processar a requisição" })
         }
     }
@@ -62,13 +66,20 @@ class ListUserByIdController {
 class UpdateUserByIdController {
     async UpdateUserById(req: Request, res: Response) {
         try {
+            const { ID, name, password, phone } = req.body
+            const ucReq = new UpdateUserByIdUseCaseRequest(ID, name, password, phone)
 
+            const validate = new UpdateUserUseCaseValidate
             const repository = new UpdateUserByIdUseCaseRepository
-            const useCase = new UpdateUserByIdUseCase(repository)
+            const useCase = new UpdateUserByIdUseCase(repository, validate)
 
-            await useCase.UpdateUserById(req.body)
+            const resultUpdateUserById = await useCase.UpdateUserById(ucReq)
 
-            res.status(200).json({ message: "usuário Atualizado com sucesso!" })
+            if (resultUpdateUserById.error) {
+                res.status(400).json({ message: resultUpdateUserById.error })
+            } else {
+                res.status(200).json({ message: "Usuário atualizado com sucesso!" })
+            }
         } catch (error) {
             console.error("Erro ao atulizar usuário:", error)
             res.status(500).json({ error: "Erro ao processar a requisição" })
@@ -78,12 +89,19 @@ class UpdateUserByIdController {
 class DeleteUserByIdController {
     async deleteUserById(req: Request, res: Response) {
         try {
+            const { ID } = req.body
+
+            const validate = new DeleteUserByIdUseCaseValidate
             const repository = new DeleteUserByIdUseCaseRepository
-            const useCase = new DeleteUserByIdUseCase(repository)
+            const useCase = new DeleteUserByIdUseCase(repository, validate)
 
-            await useCase.deleteUserById(req.body)
+            const resultDeleteUserById = await useCase.deleteUserById(ID)
 
-            res.status(200).json({ message: "usuário deletado com sucesso!" })
+            if (resultDeleteUserById.error) {
+                res.status(400).json({ message: resultDeleteUserById.error })
+            } else {
+                res.status(200).json({ message: "Usuário deletado com sucesso!" })
+            }
         } catch (error) {
             console.error("Erro ao deletar usuário:", error)
             res.status(500).json({ error: "Erro ao processar a requisição" })

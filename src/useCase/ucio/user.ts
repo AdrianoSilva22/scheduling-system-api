@@ -59,18 +59,12 @@ class UpdateUserByIdUseCaseRequest {
     password?: string
     phone?: string
 
-
     constructor(ID: string, name?: string, password?: string, phone?: string) {
         this.ID = ID
         this.name = name
         this.password = password
         this.phone = phone
     }
-
-    toString(): string {
-        return `UpdateUserByIdUseCaseRequest { ID: ${this.ID}, name: ${this.name}, password: ${this.password ? '******' : undefined}, phone: ${this.phone} }`;
-    }
-
 }
 
 class UpdateUserByIdUseCaseResponse {

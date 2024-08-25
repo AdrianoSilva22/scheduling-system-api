@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
 import { CreateAvailableScheduleUseCaseRepository, DeleteAvailableScheduleByIdUseCaseRepository, ListAvailableScheduleByIdUseCaseRepository, ListAvailableSchedulesUseCaseRepository, UpdateAvailableScheduleByIdUseCaseRepository } from "../repository/availableSchedule";
 import { CreateAvailableScheduleUseCase, DeleteAvailableScheduleByIdUseCase, ListAvailableScheduleByIdUseCase, ListAvailableSchedulesUseCase, UpdateAvailableScheduleByIdUseCase } from "../useCase/availableSchedule";
-import { CreateAvailableScheduleUseCaseValidate, ListAvailableScheduleByIdUseCaseValidate } from "../validate/availableSchedule";
-import { CreateAvailableScheduleUseCaseRequest } from "../useCase/ucio/availableSchedule";
+import { CreateAvailableScheduleUseCaseValidate, DeleteAvailableScheduleByIdUseCaseValidate, ListAvailableScheduleByIdUseCaseValidate, UpdateAvailableScheduleUseCaseValidate } from "../validate/availableSchedule";
+import { CreateAvailableScheduleUseCaseRequest, UpdateAvailableScheduleByIdUseCaseRequest } from "../useCase/ucio/availableSchedule";
 
 class CreateAvailableScheduleController {
     async createAvailableSchedule(req: Request, res: Response) {
@@ -15,9 +15,14 @@ class CreateAvailableScheduleController {
             const validate = new CreateAvailableScheduleUseCaseValidate
             const useCase = new CreateAvailableScheduleUseCase(repository, validate)
 
-            await useCase.createAvailableScheduling(ucReq)
+            const resultCreateAvailableSchedule = await useCase.createAvailableScheduling(ucReq)
 
-            res.status(201).json({ message: "Horário disponível criado com sucesso!" })
+            if (resultCreateAvailableSchedule.error) {
+                res.status(400).json({ message: resultCreateAvailableSchedule.error })
+
+            } else {
+                res.status(201).json({ message: "Horário disponível criado com sucesso!" })
+            }
         } catch (error) {
             console.error("Erro ao criar horário disponível:", error)
 
@@ -52,13 +57,13 @@ class ListAvailableScheduleByIdController {
             const useCase = new ListAvailableScheduleByIdUseCase(repository, validate)
 
             const availableschedule = (await useCase.listAvailableScheduleById(ID))
-            if (availableschedule.availableSchedule) {
-                res.status(200).json({ availableschedule: availableschedule.availableSchedule, message: "Usuário listado com sucesso" })
-            } else if (availableschedule.error) {
-                res.status(200).json({ error: availableschedule.error })
+            if (availableschedule.error) {
+                res.status(400).json({ error: availableschedule.error })
+            } else {
+                res.status(200).json({ availableschedule: availableschedule.availableSchedule, message: "Horário disponível listados com sucesso" })
             }
         } catch (error) {
-            console.error("Erro ao listar usuário:", error)
+            console.error("Erro ao listar Horário disponível:", error)
             res.status(500).json({ error: "Erro ao processar a requisição" })
         }
     }
@@ -66,13 +71,21 @@ class ListAvailableScheduleByIdController {
 class UpdateAvailableScheduleByIdController {
     async UpdateAvailableScheduleById(req: Request, res: Response) {
         try {
+            const { ID, dateTime, professional } = req.body
+
+            const ucReq = new UpdateAvailableScheduleByIdUseCaseRequest(ID, dateTime, professional)
 
             const repository = new UpdateAvailableScheduleByIdUseCaseRepository
-            const useCase = new UpdateAvailableScheduleByIdUseCase(repository)
+            const validate = new UpdateAvailableScheduleUseCaseValidate
+            const useCase = new UpdateAvailableScheduleByIdUseCase(repository, validate)
 
-            await useCase.UpdateAvailableScheduleById(req.body)
+            const resultUpdateAvailableSchedule = await useCase.UpdateAvailableScheduleById(ucReq)
 
-            res.status(200).json({ message: "usuário Atualizado com sucesso!" })
+            if (resultUpdateAvailableSchedule.error) {
+                res.status(400).json({ message: resultUpdateAvailableSchedule.error })
+            } else {
+                res.status(200).json({ message: "Horário disponível atualizado com sucesso!" })
+            }
         } catch (error) {
             console.error("Erro ao atulizar usuário:", error)
             res.status(500).json({ error: "Erro ao processar a requisição" })
@@ -82,12 +95,18 @@ class UpdateAvailableScheduleByIdController {
 class DeleteAvailableScheduleByIdController {
     async deleteAvailableScheduleById(req: Request, res: Response) {
         try {
+            const { ID } = req.body
+
             const repository = new DeleteAvailableScheduleByIdUseCaseRepository
-            const useCase = new DeleteAvailableScheduleByIdUseCase(repository)
+            const validate = new DeleteAvailableScheduleByIdUseCaseValidate
+            const useCase = new DeleteAvailableScheduleByIdUseCase(repository, validate)
 
-            await useCase.deleteAvailableScheduleById(req.body)
-
-            res.status(200).json({ message: "usuário deletado com sucesso!" })
+            const resultDeleteAvailableSchedule = await useCase.deleteAvailableScheduleById(ID)
+            if (resultDeleteAvailableSchedule.error) {
+                res.status(400).json({ message: resultDeleteAvailableSchedule.error })
+            } else {
+                res.status(200).json({ message: "Horário disponível deletado com sucesso!" })
+            }
         } catch (error) {
             console.error("Erro ao deletar usuário:", error)
             res.status(500).json({ error: "Erro ao processar a requisição" })

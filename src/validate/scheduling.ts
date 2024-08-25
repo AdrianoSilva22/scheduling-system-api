@@ -1,12 +1,12 @@
-import { CreateSchedulingUseCaseRequest, ListSchedulingByIdUseCaseRequest } from "../useCase/ucio/scheduling";
-import { CreateSchedulingUseCaseValidateInterface, ListSchedulingByIdUseCaseValidateInterface } from "../useCase/validate/scheduling";
-import { checkEmpty, checkStringEmpty } from "./validate";
+import { CreateSchedulingUseCaseRequest, ListSchedulingByIdUseCaseRequest, UpdateSchedulingByIdUseCaseRequest } from "../useCase/ucio/scheduling";
+import { CreateSchedulingUseCaseValidateInterface, DeleteSchedulingByIdUseCaseValidateInterface, ListSchedulingByIdUseCaseValidateInterface, UpdateSchedulingByIdUseCaseValidateInterface } from "../useCase/validate/scheduling";
+import { checkEmpty } from "./validate";
 
 class CreateSchedulingUseCaseValidate implements CreateSchedulingUseCaseValidateInterface {
     validateScheduling(req: CreateSchedulingUseCaseRequest): string | null {
-        const { client, horarioId } = req
+        const { client, horario } = req
         if (checkEmpty(client)) return 'O ID do cliente deve ser preenchido!'
-        if (checkEmpty(horarioId)) return 'O ID do horário deve ser preenchido!'
+        if (checkEmpty(horario)) return 'O ID do horário deve ser preenchido!'
 
         return null
     }
@@ -21,9 +21,28 @@ class ListSchedulingByIdUseCaseValidate implements ListSchedulingByIdUseCaseVali
     }
 }
 
+class DeleteSchedulingByIdUseCaseValidate implements DeleteSchedulingByIdUseCaseValidateInterface {
+    validateSchedulingById(req: ListSchedulingByIdUseCaseRequest): string | null {
 
+        if (checkEmpty(req)) return "O Id é necessário"
+
+        return null
+    }
+}
+
+class UpdatedSchedulingUseCaseValidate implements UpdateSchedulingByIdUseCaseValidateInterface {
+    validateSchedulingById(req: UpdateSchedulingByIdUseCaseRequest): string | null {
+        const { client, horario } = req
+        if (checkEmpty(client)) return 'O ID do cliente deve ser preenchido!'
+        if (checkEmpty(horario)) return 'O ID do horário deve ser preenchido!'
+
+        return null
+    }
+}
 
 export {
     CreateSchedulingUseCaseValidate,
-    ListSchedulingByIdUseCaseValidate
+    ListSchedulingByIdUseCaseValidate,
+    UpdatedSchedulingUseCaseValidate,
+    DeleteSchedulingByIdUseCaseValidate
 }

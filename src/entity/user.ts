@@ -1,5 +1,3 @@
-import { SchedulingEntity } from "./scheduling"
-
 class UserEntity {
   ID: string
   name: string
