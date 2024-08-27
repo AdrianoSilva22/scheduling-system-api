@@ -23,16 +23,18 @@ A **Scheduling API** é uma API desenvolvida em Node.js utilizando Express e Typ
 - **dotenv**: Carrega variáveis de ambiente de um arquivo `.env` para `process.env`.
 -**Entre diversas outras tecnologias**.
 
+---
+
 ## Instalação
 
 1. Clone o repositório:
     ```bash
     git clone https://github.com/AdrianoSilva22/system-scheduling-api
-```
+    ```
 
 2. Navegue até o diretório do projeto:
     ```bash
-    cd Scheduling-api
+    cd system-scheduling-api
     ```
 
 3. Instale as dependências:
@@ -44,7 +46,7 @@ A **Scheduling API** é uma API desenvolvida em Node.js utilizando Express e Typ
     - Crie um arquivo `.env` na raiz do projeto.
     - Adicione as seguintes variáveis:
 
-    ```
+    ```env
     SECRET=your_jwt_secret_key
     DATABASE_URL=your_database_url
     ```
@@ -52,16 +54,13 @@ A **Scheduling API** é uma API desenvolvida em Node.js utilizando Express e Typ
 5. Inicie a aplicação:
     ```bash
     npm run dev
-    ```.
+    ```
 
 ## Contato
 
 Para mais informações, entre em contato com:
 
-## Email:
+- **Email**: adrianodesilva22@gmail.com
+- **LinkedIn**: [Adriano da Silva](https://www.linkedin.com/in/adriano-da-silva-094506256/)
 
-adrianodesilva22@gmail.com
-
-## LinkedIn:
-
-www.linkedin.com/in/adriano-da-silva-094506256/
+---
