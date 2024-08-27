@@ -52,7 +52,7 @@ A **Scheduling API** é uma API desenvolvida em Node.js utilizando Express e Typ
 5. Inicie a aplicação:
     ```bash
     npm run dev
-    ```
+    ```.
 
 ## Contato
 
