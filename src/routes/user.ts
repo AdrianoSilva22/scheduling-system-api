@@ -9,7 +9,7 @@ class RouterUser {
 
   constructor() { 
     this.router = Router()
-    // this.router.use(checkAuthenticatedToken);
+    this.router.use(checkAuthenticatedToken)
 
     this.router.post('/createUser', authorizeAccessForRole('manager', 'professional'), new CreateUserController().createUser)
     this.router.post('/listUsers', authorizeAccessForRole('manager') , new ListUsersController().listUsers)

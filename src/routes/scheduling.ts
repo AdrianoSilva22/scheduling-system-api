@@ -8,7 +8,7 @@ class RouterScheduling {
 
     constructor() { 
         this.router = Router()
-        // this.router.use(checkAuthenticatedToken);
+        this.router.use(checkAuthenticatedToken)
     
         this.router.post('/createScheduling', authorizeAccessForRole('manager', 'professional', 'client'), new CreateSchedulingController().createScheduling)
         this.router.post('/listSchedulings', authorizeAccessForRole('manager') , new ListSchedulingsController().listSchedulings)
