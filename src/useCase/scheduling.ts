@@ -99,6 +99,8 @@ class UpdateSchedulingByIdUseCase {
                 console.log('PRE_CONDITIONAL_ERROR', errorMessage)
                 return new UpdateSchedulingByIdUseCaseResponse(errorMessage)
             }
+            let newUpdatedAt = new Date()
+            req.updatedAt = newUpdatedAt
 
             const scheduling = await this.repository.updateSchedulingById(req)
 

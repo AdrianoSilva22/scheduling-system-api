@@ -55,11 +55,13 @@ class UpdateSchedulingByIdUseCaseRequest {
     ID: string
     client?: UserEntity
     horario?: AvailableScheduleEntity
+    updatedAt?: Date
 
-    constructor(ID: string, client?: UserEntity, horario?: AvailableScheduleEntity) {
+    constructor(ID: string, client?: UserEntity, horario?: AvailableScheduleEntity, updatedAt?: Date) {
         this.ID = ID
         this.client = client
         this.horario = horario
+        this.updatedAt = updatedAt
     }
 }
 

@@ -8,7 +8,7 @@ class RouterAvailableSchedule {
 
     constructor() { 
         this.router = Router()
-        this.router.use(checkAuthenticatedToken);
+        // this.router.use(checkAuthenticatedToken);
     
         this.router.post('/createAvailableSchedule', authorizeAccessForRole('manager', 'professional'), new CreateAvailableScheduleController().createAvailableSchedule)
         this.router.post('/listAvailableSchedules', authorizeAccessForRole('manager') , new ListAvailableSchedulesController().listAvailableSchedules)

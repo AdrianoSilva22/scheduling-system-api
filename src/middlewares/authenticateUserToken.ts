@@ -6,21 +6,22 @@ const checkAuthenticatedToken = (req: IGetUserAuthInfoRequest, res: Response, ne
     try {
         const headersToken = req.headers.authorization as string
 
-        if (!headersToken) { res.status(401).send("É necessário autenticar.") }
+        if (headersToken) {
+            const headersTokenWithoutBearer = headersToken.slice(7, headersToken.length)
 
-        const headersTokenWithoutBearer = headersToken.slice(7, headersToken.length)
+            jwt.verify(headersTokenWithoutBearer, process.env.SECRET as string, (err, decoded) => {
+                if (err) {
+                    res.status(401).send({ message: "Token inválido" });
+                } else {
+                    req.user = decoded as { id: string; name: string; email: string; role: string };
 
-        jwt.verify(headersTokenWithoutBearer, process.env.SECRET as string, (err, decoded) => {
-            if (err) {
-                res.status(401).send({ message: "Token inválido" });
-            } else {
-                req.user = decoded as { id: string; name: string; email: string; role: string };
-
-                next()
-            }
-        })
+                    next()
+                }
+            })
+        } else {
+            res.status(401).send("É necessário autenticar.")
+        }
     } catch (err) {
-        console.log(err)
         res.status(500).send("Falha ao autenticar o token")
     }
 }

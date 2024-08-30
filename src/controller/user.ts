@@ -66,19 +66,20 @@ class ListUserByIdController {
 class UpdateUserByIdController {
     async UpdateUserById(req: Request, res: Response) {
         try {
-            const { ID, name, password, phone } = req.body
-            const ucReq = new UpdateUserByIdUseCaseRequest(ID, name, password, phone)
+            const { ID, name, password, phone, email } = req.body
+            const ucReq = new UpdateUserByIdUseCaseRequest(ID, name, email, password, phone)
 
             const validate = new UpdateUserUseCaseValidate
             const repository = new UpdateUserByIdUseCaseRepository
             const useCase = new UpdateUserByIdUseCase(repository, validate)
 
             const resultUpdateUserById = await useCase.UpdateUserById(ucReq)
-
+            console.log(req.body);
+            
             if (resultUpdateUserById.error) {
                 res.status(400).json({ message: resultUpdateUserById.error })
             } else {
-                res.status(200).json({ message: "Usuário atualizado com sucesso!" })
+                res.status(200).json({ message: "Usuário atualizado com sucesso!", updatedUser: resultUpdateUserById.user })
             }
         } catch (error) {
             console.error("Erro ao atulizar usuário:", error)

@@ -20,8 +20,8 @@ class ListUserByIdUseCaseRepository implements ListUserByIdUseCaseRepositoryInte
     }
 }
 class UpdateUserByIdUseCaseRepository implements UpdateUserByIdUseCaseRepositoryInterface {
-    async updateUserById(ID: UpdateUserByIdUseCaseRequest): Promise<UserEntity> {
-        return updateUserById(ID)
+    async updateUserById(req: UpdateUserByIdUseCaseRequest): Promise<UserEntity> {
+        return updateUserById(req)
     }
 }
 class DeleteUserByIdUseCaseRepository implements DeleteUserByIdUseCaseRepositoryInterface {

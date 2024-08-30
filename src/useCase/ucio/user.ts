@@ -56,14 +56,18 @@ class ListUserByIdUseCaseResponse {
 class UpdateUserByIdUseCaseRequest {
     ID: string
     name?: string
+    email?: string
     password?: string
     phone?: string
+    updatedAt?: Date
 
-    constructor(ID: string, name?: string, password?: string, phone?: string) {
+    constructor(ID: string, name?: string, email?: string, password?: string, phone?: string, updatedAt?: Date) {
         this.ID = ID
         this.name = name
+        this.email = email
         this.password = password
         this.phone = phone
+        this.updatedAt = updatedAt
     }
 }
 

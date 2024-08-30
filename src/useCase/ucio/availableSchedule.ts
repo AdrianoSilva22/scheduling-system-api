@@ -54,11 +54,13 @@ class UpdateAvailableScheduleByIdUseCaseRequest {
     ID: string
     dateTime?: Date
     professional?: AvailableScheduleEntity
+    updatedAt?: Date
 
-    constructor(ID: string, dateTime?: Date, professional?: AvailableScheduleEntity) {
+    constructor(ID: string, dateTime?: Date, professional?: AvailableScheduleEntity, updatedAt?:Date,) {
         this.ID = ID
         this.dateTime = dateTime
         this.professional = professional
+        this.updatedAt = updatedAt
     }
 }
 

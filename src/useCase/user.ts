@@ -123,6 +123,9 @@ class UpdateUserByIdUseCase {
                 req.password = passwordHashUpdate
             }
 
+            let newUpdatedAt = new Date()
+            req.updatedAt = newUpdatedAt
+
             const user = await this.repository.updateUserById(req)
 
             return new UpdateUserByIdUseCaseResponse(user)
@@ -151,7 +154,8 @@ class DeleteUserByIdUseCase {
                 return new DeleteUserByIdUseCaseResponse(errorMessage)
             }
             const { ID } = req
-            const user = await this.repository.deleteUserById(ID)
+            
+            await this.repository.deleteUserById(ID)
 
             return new DeleteUserByIdUseCaseResponse(null)
 

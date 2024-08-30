@@ -84,7 +84,7 @@ class UpdateAvailableScheduleByIdController {
             if (resultUpdateAvailableSchedule.error) {
                 res.status(400).json({ message: resultUpdateAvailableSchedule.error })
             } else {
-                res.status(200).json({ message: "Horário disponível atualizado com sucesso!" })
+                res.status(200).json({ message: "Horário disponível atualizado com sucesso!", updatedAvailableSchedule: resultUpdateAvailableSchedule.availableSchedule })
             }
         } catch (error) {
             console.error("Erro ao atulizar usuário:", error)

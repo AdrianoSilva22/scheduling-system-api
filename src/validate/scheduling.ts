@@ -33,8 +33,8 @@ class DeleteSchedulingByIdUseCaseValidate implements DeleteSchedulingByIdUseCase
 class UpdatedSchedulingUseCaseValidate implements UpdateSchedulingByIdUseCaseValidateInterface {
     validateSchedulingById(req: UpdateSchedulingByIdUseCaseRequest): string | null {
         const { client, horario } = req
-        if (checkEmpty(client)) return 'O ID do cliente deve ser preenchido!'
-        if (checkEmpty(horario)) return 'O ID do horário deve ser preenchido!'
+        if (checkEmpty(client?.ID)) return 'O ID do cliente deve ser preenchido!'
+        if (checkEmpty(horario?.ID)) return 'O ID do horário deve ser preenchido!'
 
         return null
     }

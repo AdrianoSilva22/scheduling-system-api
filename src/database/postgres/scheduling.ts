@@ -27,7 +27,10 @@ async function listSchedulings(): Promise<SchedulingEntity[]> {
 async function listSchedulingById(ID: ListSchedulingByIdUseCaseRequest): Promise<SchedulingEntity> {
     const repository = await Connection.getRepository(SchedulingModel)
 
-    const schedulingModel = await repository.findOneBy({ ID })
+    const schedulingModel = await repository.findOne({
+        where: {ID},
+        relations: ['client', 'horario']
+      })
 
     const schedulingEntity = toSchedulingEntity(schedulingModel)
 
@@ -41,7 +44,10 @@ async function updateSchedulingById(req: UpdateSchedulingByIdUseCaseRequest): Pr
 
     await repository.update(ID, SchedulingProps)
 
-    const updatedSchedulingModel = await repository.findOneBy({ ID });
+    const updatedSchedulingModel = await repository.findOne({ 
+        where: {ID},
+        relations: ['client', 'horario']
+     });
     
     const schedulingEntity = toSchedulingEntity(updatedSchedulingModel)
 

@@ -25,6 +25,7 @@ class CreateAvailableScheduleUseCase {
             }
 
             const { dateTime, professional } = req
+
             const UUID = generateUUID()
             const now = new Date()
 
@@ -105,6 +106,9 @@ class UpdateAvailableScheduleByIdUseCase {
                 return new UpdateAvailableScheduleByIdUseCaseResponse(errorMessage)
             }
 
+            let newUpdatedAt = new Date()
+            req.updatedAt = newUpdatedAt
+            
             const availableschedule = await this.repository.updateAvailableScheduleById(req)
 
             return new UpdateAvailableScheduleByIdUseCaseResponse(availableschedule)

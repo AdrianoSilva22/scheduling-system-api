@@ -83,7 +83,7 @@ class UpdateSchedulingByIdController {
             if (resultUpdateSchedulingById.error) {
                 res.status(400).json({ message: resultUpdateSchedulingById.error })
             } else {
-                res.status(200).json({ message: "Agendamento atualizado com sucesso!" })
+                res.status(200).json({ message: "Agendamento atualizado com sucesso!", updatedScheduling: resultUpdateSchedulingById.scheduling  })
             }
 
         } catch (error) {

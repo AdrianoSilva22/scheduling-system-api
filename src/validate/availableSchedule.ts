@@ -15,8 +15,8 @@ class UpdateAvailableScheduleUseCaseValidate implements UpdateAvailableScheduleB
     validateAvailableScheduleById(req: UpdateAvailableScheduleByIdUseCaseRequest): string | null {
         const { ID, dateTime, professional } = req
         if (checkEmpty(ID)) return "O Id é necessário"
-        if (checkEmpty(professional)) return 'O Id do profissional deve ser informado!'
-        if (checkEmpty(dateTime)) return 'Adata e hora devem ser informados!'
+        if (checkEmpty(professional?.ID)) return 'O Id do profissional deve ser informado!'
+        if (checkEmpty(dateTime)) return 'A data e hora devem ser informados!'
 
         return null
     }
