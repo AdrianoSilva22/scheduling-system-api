@@ -21,7 +21,7 @@ A **Scheduling API** é uma API desenvolvida em Node.js utilizando Express e Typ
 - **JWT**: JSON Web Token para autenticação e autorização de usuários.
 - **TypeORM**: ORM (Object-Relational Mapping) para gerenciamento de banco de dados.
 - **dotenv**: Carrega variáveis de ambiente de um arquivo `.env` para `process.env`.
--**Entre diversas outras tecnologias**.
+-**Entre diversas outras tecnologias atualmente usadas no mercado tecnológico**.
 
 ---
 
