@@ -33,26 +33,23 @@ async function listUserById(ID: ListUserByIdUseCaseRequest): Promise<UserEntity>
 }
 
 async function updateUserById(req: UpdateUserByIdUseCaseRequest): Promise<UserEntity> {
-    const { ID, ...userProps } = req;
+    const { ID, ...userProps } = req
 
-    const repository = await Connection.getRepository(UserModel);
+    const repository = await Connection.getRepository(UserModel)
 
-    // Atualizar o usuário com as novas propriedades
-    await repository.update(ID, {
-        ...userProps
-    });
+    const existingUser = await repository.findOneBy({ ID })
 
-    // Buscar o usuário atualizado
-    const updatedUserModel = await repository.findOneBy({ ID });
-
-    if (!updatedUserModel) {
-        throw new Error(`User with ID ${ID} not found`);
+    if (!existingUser) {
+        throw new Error(`Usuário com ID: ${ID} não encontrado`);
     }
 
-    // Converter o modelo de usuário para a entidade de usuário
-    const userEntity = toUserEntity(updatedUserModel);
+    await repository.update(ID, userProps)
 
-    return userEntity;
+    const updatedUserModel = await repository.findOneBy({ ID });
+
+    const userEntity = toUserEntity(updatedUserModel)
+
+    return userEntity
 }
 
 async function deleteUserById(ID: string): Promise<void> {

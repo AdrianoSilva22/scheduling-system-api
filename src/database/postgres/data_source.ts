@@ -22,7 +22,7 @@ class DataSoucerBuilder {
         return new DataSource({
             type: 'postgres',
             url: 'postgresql://postgres:admin@localhost:5432/postgres',
-            synchronize: true,
+            synchronize: false,
             entities: await this.resolveEntities()
 
         })

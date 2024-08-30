@@ -42,6 +42,12 @@ async function updateSchedulingById(req: UpdateSchedulingByIdUseCaseRequest): Pr
 
     const repository = await Connection.getRepository(SchedulingModel)
 
+    const existingScheduling = await repository.findOneBy({ ID })
+
+    if (!existingScheduling) {
+        throw new Error(`Agendamento com ID: ${ID} não encontrado`);
+    }
+
     await repository.update(ID, SchedulingProps)
 
     const updatedSchedulingModel = await repository.findOne({ 

@@ -42,6 +42,12 @@ async function updateAvailableScheduleById(req: UpdateAvailableScheduleByIdUseCa
 
     const repository = await Connection.getRepository(AvailableScheduleModel)
 
+    const existingAvailableSchedule = await repository.findOneBy({ ID })
+
+    if (!existingAvailableSchedule) {
+        throw new Error(`Horário Disponível com ID: ${ID} não encontrado`);
+    }
+
     await repository.update(ID, availableScheduleProps)
 
     const updatedAvailableScheduleModel = await repository.findOne({ 

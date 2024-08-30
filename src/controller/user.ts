@@ -74,7 +74,6 @@ class UpdateUserByIdController {
             const useCase = new UpdateUserByIdUseCase(repository, validate)
 
             const resultUpdateUserById = await useCase.UpdateUserById(ucReq)
-            console.log(req.body);
             
             if (resultUpdateUserById.error) {
                 res.status(400).json({ message: resultUpdateUserById.error })
