@@ -1,0 +1,454 @@
+openapi: 3.0.0
+info:
+  title: API Documentation
+  version: 1.0.0
+  description: Documentação da API para gerenciamento de usuários
+servers:
+  - url: http://localhost:8085
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: ID do usuário
+        name:
+          type: string
+          description: Nome do usuário
+        email:
+          type: string
+          description: Email do usuário
+        phone:
+          type: string
+          description: Telefone do usuário
+        role:
+          type: string
+          enum:
+            - manager
+            - professional
+            - client
+          description: Papel do usuário
+        status:
+          type: string
+          enum:
+            - ATIVO
+            - INATIVO
+          description: Status do usuário
+    Scheduling:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: ID do agendamento
+        client:
+          $ref: '#/components/schemas/User'
+        horario:
+          type: object
+          properties:
+            ID:
+              type: string
+              format: uuid
+              description: ID do horário disponível
+        createdAt:
+          type: string
+          format: date-time
+          description: Data de criação do agendamento
+        updatedAt:
+          type: string
+          format: date-time
+          description: Data de atualização do agendamento
+    AvailableSchedule:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: ID do horário disponível
+        dateTime:
+          type: string
+          format: date-time
+          description: Data e hora do horário disponível
+        professional:
+          $ref: '#/components/schemas/User'
+        createdAt:
+          type: string
+          format: date-time
+          description: Data de criação do horário disponível
+        updatedAt:
+          type: string
+          format: date-time
+          description: Data de atualização do horário disponível
+
+paths:
+  /authUser:
+    post:
+      summary: Realiza o login do usuário
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  description: Email do usuário
+                password:
+                  type: string
+                  description: Senha do usuário
+      responses:
+        200:
+          description: Login bem-sucedido, retorna um token JWT
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    description: Token JWT para autenticação
+        401:
+          description: Email ou senha inválidos
+        400:
+          description: Requisição inválida
+
+  /auth/refresh-token:
+    post:
+      summary: Atualiza o token JWT
+      security:
+        - bearerAuth: []
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                refreshToken:
+                  type: string
+                  description: Token de refresh JWT
+      responses:
+        200:
+          description: Token atualizado com sucesso, retorna um novo token JWT
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    description: Novo token JWT
+        401:
+          description: Refresh token inválido
+        400:
+          description: Requisição inválida
+
+  /createUser:
+    post:
+      summary: Cria um novo usuário
+      security:
+        - bearerAuth: []
+      tags:
+        - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: Nome do usuário
+                email:
+                  type: string
+                  description: Email do usuário
+                password:
+                  type: string
+                  description: Senha do usuário
+                phone:
+                  type: string
+                  description: Telefone do usuário
+                role:
+                  type: string
+                  enum:
+                    - manager
+                    - professional
+                    - client
+                  description: Papel do usuário
+      responses:
+        201:
+          description: Usuário criado com sucesso
+        400:
+          description: Requisição inválida
+        401:
+          description: Token de autenticação inválido ou não fornecido
+        403:
+          description: Acesso proibido, papel não autorizado
+
+  /listUsers:
+    post:
+      summary: Lista todos os usuários
+      security:
+        - bearerAuth: []
+      tags:
+        - Users
+      responses:
+        200:
+          description: Lista de usuários retornada com sucesso
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        401:
+          description: Token inválido ou não fornecido
+        403:
+          description: Acesso proibido, apenas 'manager' tem permissão
+
+  /listUserById:
+    post:
+      summary: Lista um usuário específico pelo ID
+      security:
+        - bearerAuth: []
+      tags:
+        - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                  format: uuid
+                  description: ID do usuário
+      responses:
+        200:
+          description: Detalhes do usuário retornados com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        400:
+          description: Requisição inválida
+        401:
+          description: Token inválido ou não fornecido
+        403:
+          description: Acesso proibido, apenas 'manager' tem permissão
+
+  /deleteUserById:
+    post:
+      summary: Deleta um usuário específico pelo ID
+      security:
+        - bearerAuth: []
+      tags:
+        - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                  format: uuid
+                  description: ID do usuário
+      responses:
+        200:
+          description: Usuário deletado com sucesso
+        400:
+          description: Requisição inválida
+        401:
+          description: Token inválido ou não fornecido
+        403:
+          description: Acesso proibido, apenas 'manager' tem permissão
+
+  /updateUserById:
+    post:
+      summary: Atualiza um usuário específico pelo ID
+      security:
+        - bearerAuth: []
+      tags:
+        - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                  format: uuid
+                  description: ID do usuário
+                name:
+                  type: string
+                  description: Nome do usuário
+                email:
+                  type: string
+                  description: Email do usuário
+                password:
+                  type: string
+                  description: Senha do usuário
+                phone:
+                  type: string
+                  description: Telefone do usuário
+                role:
+                  type: string
+                  enum:
+                    - manager
+                    - professional
+                    - client
+                  description: Papel do usuário
+                status:
+                  type: string
+                  enum:
+                    - ATIVO
+                    - INATIVO
+                  description: Status do usuário
+      responses:
+        200:
+          description: Usuário atualizado com sucesso
+        400:
+          description: Requisição inválida
+        401:
+          description: Token inválido ou não fornecido
+        403:
+          description: Acesso proibido, apenas 'manager' tem permissão
+
+  /createScheduling:
+    post:
+      summary: Cria um novo agendamento
+      security:
+        - bearerAuth: []
+      tags:
+        - Scheduling
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                client:
+                  $ref: '#/components/schemas/User'
+                horario:
+                  type: object
+                  properties:
+                    ID:
+                      type: string
+                      format: uuid
+                      description: ID do horário disponível
+                createdAt:
+                  type: string
+                  format: date-time
+                  description: Data de criação do agendamento
+                updatedAt:
+                  type: string
+                  format: date-time
+                  description: Data de atualização do agendamento
+      responses:
+        201:
+          description: Agendamento criado com sucesso
+        400:
+          description: Requisição inválida
+        401:
+          description: Token inválido ou não fornecido
+        403:
+          description: Acesso proibido
+
+  /listSchedulings:
+    post:
+      summary: Lista todos os agendamentos
+      security:
+        - bearerAuth: []
+      tags:
+        - Scheduling
+      responses:
+        200:
+          description: Lista de agendamentos retornada com sucesso
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Scheduling'
+        401:
+          description: Token inválido ou não fornecido
+
+  /updateAvailableScheduleById:
+    post:
+      summary: Atualiza um horário disponível pelo ID
+      security:
+        - bearerAuth: []
+      tags:
+        - AvailableSchedule
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                  format: uuid
+                  description: ID do horário disponível
+                dateTime:
+                  type: string
+                  format: date-time
+                  description: Data e hora do horário disponível
+                professional:
+                  $ref: '#/components/schemas/User'
+                createdAt:
+                  type: string
+                  format: date-time
+                  description: Data de criação do horário disponível
+                updatedAt:
+                  type: string
+                  format: date-time
+                  description: Data de atualização do horário disponível
+      responses:
+        200:
+          description: Horário disponível atualizado com sucesso
+        400:
+          description: Requisição inválida
+        401:
+          description: Token inválido ou não fornecido
+        403:
+          description: Acesso proibido
+
+  /listAvailableSchedules:
+    post:
+      summary: Lista todos os horários disponíveis
+      security:
+        - bearerAuth: []
+      tags:
+        - AvailableSchedule
+      responses:
+        200:
+          description: Lista de horários disponíveis retornada com sucesso
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AvailableSchedule'
+        401:
+          description: Token inválido ou não fornecido
