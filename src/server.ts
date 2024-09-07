@@ -5,8 +5,14 @@ import { RouterUser } from './routes/user'
 import { RouterAvailableSchedule } from './routes/availableSchedule'
 import { RouterScheduling } from './routes/scheduling'
 import { RouterAuthUser } from './routes/auth'
+import swaggerUi from 'swagger-ui-express';
+import YAML from 'yamljs';
 
 const app = express()
+
+const swaggerDocument = YAML.load('./swagger.yaml');
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 const PORT = parseInt(process.env.PORT || '8085', 10)
 
